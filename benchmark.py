@@ -64,7 +64,9 @@ def run_session(engine_names, datasets, num_files, repeats, models):
     RESULTS.mkdir(exist_ok=True)
     engines = {n: ENGINES[n](**({"model": models[n]} if n in models else {})) for n in engine_names}
     cache = load_cache()
-    session = {"started": datetime.now().isoformat(timespec="seconds"), "machine": platform.platform(),
+    prev = RESULTS / "session.json"  # resumed runs keep the original start time
+    started = json.loads(prev.read_text())["started"] if prev.exists() else None
+    session = {"started": started or datetime.now().isoformat(timespec="seconds"), "machine": platform.platform(),
                "python": platform.python_version(), "repeats": repeats, "models": {}, "excluded": {}}
     for n, e in engines.items():
         session["models"][n] = {"model": getattr(e, "model", ""), "price_per_hour_usd": e.price_per_hour}

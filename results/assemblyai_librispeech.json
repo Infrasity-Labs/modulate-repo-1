@@ -3,14 +3,14 @@
     "engine": "assemblyai",
     "model": "universal-3-5-pro",
     "dataset": "librispeech",
-    "files": 2,
+    "files": 20,
     "files_excluded": 0,
-    "audio_hours": 0.0049,
-    "wer_percent": 0.0,
-    "mean_latency_s": 7.27,
-    "median_latency_s": 7.27,
+    "audio_hours": 0.0457,
+    "wer_percent": 1.81,
+    "mean_latency_s": 8.34,
+    "median_latency_s": 6.68,
     "price_per_hour_usd": 0.21,
-    "tested_on": "2026-10-05"
+    "tested_on": "2026-10-06"
   },
   "files": [
     {
@@ -20,9 +20,11 @@
       "excluded": false,
       "hypothesis": "Concord returned to its place amidst the tents.",
       "latencies_s": [
-        6.134
+        7.125,
+        5.61,
+        4.831
       ],
-      "mean_latency_s": 6.134,
+      "mean_latency_s": 5.855,
       "empty": false
     },
     {
@@ -32,9 +34,263 @@
       "excluded": false,
       "hypothesis": "The English forwarded to the French baskets of flowers, of which they had made a plentiful provision to greet the arrival of the young princess. The French, in return, invited the English to a supper which was to be given the next day.",
       "latencies_s": [
-        8.412
+        6.911,
+        7.24,
+        8.39
       ],
-      "mean_latency_s": 8.412,
+      "mean_latency_s": 7.514,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0002",
+      "reference": "CONGRATULATIONS WERE POURED IN UPON THE PRINCESS EVERYWHERE DURING HER JOURNEY",
+      "duration_s": 5.025,
+      "excluded": false,
+      "hypothesis": "Congratulations were poured in upon the Princess everywhere during her journey.",
+      "latencies_s": [
+        8.807,
+        6.389,
+        6.098
+      ],
+      "mean_latency_s": 7.098,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0003",
+      "reference": "FROM THE RESPECT PAID HER ON ALL SIDES SHE SEEMED LIKE A QUEEN AND FROM THE ADORATION WITH WHICH SHE WAS TREATED BY TWO OR THREE SHE APPEARED AN OBJECT OF WORSHIP THE QUEEN MOTHER GAVE THE FRENCH THE MOST AFFECTIONATE RECEPTION FRANCE WAS HER NATIVE COUNTRY AND SHE HAD SUFFERED TOO MUCH UNHAPPINESS IN ENGLAND FOR ENGLAND TO HAVE MADE HER FORGET FRANCE",
+      "duration_s": 23.315,
+      "excluded": false,
+      "hypothesis": "From the respect paid her on all sides she seemed like a queen, and from the adoration with which she was treated by 2 or 3 she appeared an object of worship. The queen mother gave the French the most affectionate reception. France was her native country, and she had suffered too much unhappiness in England for England to have made her forget France.",
+      "latencies_s": [
+        10.005,
+        11.276,
+        14.428
+      ],
+      "mean_latency_s": 11.903,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0004",
+      "reference": "SHE TAUGHT HER DAUGHTER THEN BY HER OWN AFFECTION FOR IT THAT LOVE FOR A COUNTRY WHERE THEY HAD BOTH BEEN HOSPITABLY RECEIVED AND WHERE A BRILLIANT FUTURE OPENED BEFORE THEM",
+      "duration_s": 11.065,
+      "excluded": false,
+      "hypothesis": "She taught her daughter, then, by her own affection for it, that love for a country where they had both been hospitably received and where a brilliant future opened for them.",
+      "latencies_s": [
+        9.868,
+        14.675,
+        13.63
+      ],
+      "mean_latency_s": 12.724,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0005",
+      "reference": "THE COUNT HAD THROWN HIMSELF BACK ON HIS SEAT LEANING HIS SHOULDERS AGAINST THE PARTITION OF THE TENT AND REMAINED THUS HIS FACE BURIED IN HIS HANDS WITH HEAVING CHEST AND RESTLESS LIMBS",
+      "duration_s": 13.16,
+      "excluded": false,
+      "hypothesis": "The Count had thrown himself back on his seat, leaning his shoulders against the partition of the tent, and remained thus, his face buried in his hands, with heaving chest and restless limbs.",
+      "latencies_s": [
+        28.311,
+        34.601,
+        31.793
+      ],
+      "mean_latency_s": 31.568,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0006",
+      "reference": "THIS HAS INDEED BEEN A HARASSING DAY CONTINUED THE YOUNG MAN HIS EYES FIXED UPON HIS FRIEND",
+      "duration_s": 5.85,
+      "excluded": false,
+      "hypothesis": "This has indeed been a harassing day, continued the young man, his eyes fixed upon his friend.",
+      "latencies_s": [
+        6.281,
+        7.122,
+        6.374
+      ],
+      "mean_latency_s": 6.592,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0007",
+      "reference": "YOU WILL BE FRANK WITH ME I ALWAYS AM",
+      "duration_s": 3.315,
+      "excluded": false,
+      "hypothesis": "You will be frank with me? I always am.",
+      "latencies_s": [
+        6.62,
+        6.083,
+        5.593
+      ],
+      "mean_latency_s": 6.099,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0008",
+      "reference": "CAN YOU IMAGINE WHY BUCKINGHAM HAS BEEN SO VIOLENT I SUSPECT",
+      "duration_s": 4.785,
+      "excluded": false,
+      "hypothesis": "Can you imagine why Buckingham has been so violent? I suspect.",
+      "latencies_s": [
+        6.739,
+        5.316,
+        4.694
+      ],
+      "mean_latency_s": 5.583,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0009",
+      "reference": "IT IS YOU WHO ARE MISTAKEN RAOUL I HAVE READ HIS DISTRESS IN HIS EYES IN HIS EVERY GESTURE AND ACTION THE WHOLE DAY",
+      "duration_s": 7.28,
+      "excluded": false,
+      "hypothesis": "It is you who are mistaken, Raoul. I have read his distress in his eyes, in his every gesture and action the whole day.",
+      "latencies_s": [
+        7.144,
+        6.179,
+        7.651
+      ],
+      "mean_latency_s": 6.991,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0010",
+      "reference": "I CAN PERCEIVE LOVE CLEARLY ENOUGH",
+      "duration_s": 3.035,
+      "excluded": false,
+      "hypothesis": "I can perceive love clearly enough.",
+      "latencies_s": [
+        4.667,
+        4.74,
+        5.079
+      ],
+      "mean_latency_s": 4.829,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0011",
+      "reference": "I AM CONVINCED OF WHAT I SAY SAID THE COUNT",
+      "duration_s": 3.195,
+      "excluded": false,
+      "hypothesis": "I am convinced of what I say, said the Count.",
+      "latencies_s": [
+        6.223,
+        5.708,
+        5.423
+      ],
+      "mean_latency_s": 5.785,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0012",
+      "reference": "IT IS ANNOYANCE THEN",
+      "duration_s": 1.94,
+      "excluded": false,
+      "hypothesis": "It is annoyance, then.",
+      "latencies_s": [
+        6.809,
+        4.193,
+        4.378
+      ],
+      "mean_latency_s": 5.127,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0013",
+      "reference": "IN THOSE VERY TERMS I EVEN ADDED MORE",
+      "duration_s": 2.94,
+      "excluded": false,
+      "hypothesis": "In those very terms, I even added more.",
+      "latencies_s": [
+        5.334,
+        4.678,
+        5.873
+      ],
+      "mean_latency_s": 5.295,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0014",
+      "reference": "BUT CONTINUED RAOUL NOT INTERRUPTED BY THIS MOVEMENT OF HIS FRIEND HEAVEN BE PRAISED THE FRENCH WHO ARE PRONOUNCED TO BE THOUGHTLESS AND INDISCREET RECKLESS EVEN ARE CAPABLE OF BRINGING A CALM AND SOUND JUDGMENT TO BEAR ON MATTERS OF SUCH HIGH IMPORTANCE",
+      "duration_s": 16.84,
+      "excluded": false,
+      "hypothesis": "But, continued Raoul, not interrupted by this movement of his friend, heaven be praised, the French, who are pronounced to be thoughtless and indiscreet, reckless even, are capable of bringing a calm and sound judgment to bear on matters of such high importance.",
+      "latencies_s": [
+        11.005,
+        9.303,
+        11.165
+      ],
+      "mean_latency_s": 10.491,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0015",
+      "reference": "THUS IT IS THAT THE HONOR OF THREE IS SAVED OUR COUNTRY'S OUR MASTER'S AND OUR OWN",
+      "duration_s": 6.38,
+      "excluded": false,
+      "hypothesis": "Thus it is that the honor of 3 is saved: our country, our masters, and our own.",
+      "latencies_s": [
+        9.165,
+        7.251,
+        7.483
+      ],
+      "mean_latency_s": 7.966,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0016",
+      "reference": "YES I NEED REPOSE MANY THINGS HAVE AGITATED ME TO DAY BOTH IN MIND AND BODY WHEN YOU RETURN TO MORROW I SHALL NO LONGER BE THE SAME MAN",
+      "duration_s": 10.015,
+      "excluded": false,
+      "hypothesis": "Yes, I need repose. Many things have agitated me today, both in mind and body. When you return tomorrow, I shall no longer be the same man.",
+      "latencies_s": [
+        7.081,
+        6.088,
+        8.281
+      ],
+      "mean_latency_s": 7.15,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0017",
+      "reference": "BUT IN THIS FRIENDLY PRESSURE RAOUL COULD DETECT THE NERVOUS AGITATION OF A GREAT INTERNAL CONFLICT",
+      "duration_s": 6.16,
+      "excluded": false,
+      "hypothesis": "But in this friendly pressure Rao could detect the nervous agitation of a great internal conflict.",
+      "latencies_s": [
+        5.971,
+        4.658,
+        4.781
+      ],
+      "mean_latency_s": 5.137,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0018",
+      "reference": "THE NIGHT WAS CLEAR STARLIT AND SPLENDID THE TEMPEST HAD PASSED AWAY AND THE SWEET INFLUENCES OF THE EVENING HAD RESTORED LIFE PEACE AND SECURITY EVERYWHERE",
+      "duration_s": 10.81,
+      "excluded": false,
+      "hypothesis": "The night was clear, starlit, and splendid; the tempest had passed away, and the sweet influences of the evening had restored life, peace, and security everywhere.",
+      "latencies_s": [
+        6.323,
+        7.574,
+        6.4
+      ],
+      "mean_latency_s": 6.766,
+      "empty": false
+    },
+    {
+      "id": "6930-75918-0019",
+      "reference": "UPON THE LARGE SQUARE IN FRONT OF THE HOTEL THE SHADOWS OF THE TENTS INTERSECTED BY THE GOLDEN MOONBEAMS FORMED AS IT WERE A HUGE MOSAIC OF JET AND YELLOW FLAGSTONES",
+      "duration_s": 11.645,
+      "excluded": false,
+      "hypothesis": "Upon the large square in front of the hotel the shadows of the tents intersected by the golden moonbeams formed as it were a huge mosaic of jet and yellow flagstones.",
+      "latencies_s": [
+        6.58,
+        6.494,
+        6.081
+      ],
+      "mean_latency_s": 6.385,
       "empty": false
     }
   ]

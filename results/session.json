@@ -1,8 +1,8 @@
 {
-  "started": "2026-10-05T22:51:11",
+  "started": "2026-10-05T22:51:48",
   "machine": "macOS-26.3-arm64-arm-64bit",
   "python": "3.9.6",
-  "repeats": 1,
+  "repeats": 3,
   "models": {
     "velma": {
       "model": "english-fast",
@@ -18,87 +18,167 @@
     }
   },
   "excluded": {
-    "librispeech": []
+    "librispeech": [],
+    "voxpopuli": [],
+    "commonvoice": []
   },
-  "finished": "2026-10-05T22:51:41",
+  "finished": "2026-10-06T00:20:03",
   "summaries": [
     {
       "engine": "velma",
       "model": "english-fast",
       "dataset": "librispeech",
-      "files": 2,
+      "files": 20,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 5.18,
-      "median_latency_s": 5.18,
+      "audio_hours": 0.0457,
+      "wer_percent": 0.68,
+      "mean_latency_s": 7.47,
+      "median_latency_s": 6.87,
       "price_per_hour_usd": 0.025,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "velma",
+      "model": "english-fast",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 4.77,
+      "mean_latency_s": 9.71,
+      "median_latency_s": 6.93,
+      "price_per_hour_usd": 0.025,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "velma",
+      "model": "english-fast",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 9.82,
+      "mean_latency_s": 18.64,
+      "median_latency_s": 20.57,
+      "price_per_hour_usd": 0.025,
+      "tested_on": "2026-10-06"
     },
     {
       "engine": "velma",
       "model": "english-fast",
       "dataset": "overall",
-      "files": 2,
+      "files": 60,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 5.18,
-      "median_latency_s": 5.18,
+      "audio_hours": 0.1267,
+      "wer_percent": 3.87,
+      "mean_latency_s": 11.94,
+      "median_latency_s": 8.65,
       "price_per_hour_usd": 0.025,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
     },
     {
       "engine": "deepgram",
       "model": "nova-3",
       "dataset": "librispeech",
-      "files": 2,
+      "files": 20,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 2.62,
-      "median_latency_s": 2.62,
+      "audio_hours": 0.0457,
+      "wer_percent": 2.72,
+      "mean_latency_s": 3.79,
+      "median_latency_s": 2.78,
       "price_per_hour_usd": 0.258,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "deepgram",
+      "model": "nova-3",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 8.3,
+      "mean_latency_s": 5.85,
+      "median_latency_s": 3.91,
+      "price_per_hour_usd": 0.258,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "deepgram",
+      "model": "nova-3",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 12.27,
+      "mean_latency_s": 4.5,
+      "median_latency_s": 4.52,
+      "price_per_hour_usd": 0.258,
+      "tested_on": "2026-10-06"
     },
     {
       "engine": "deepgram",
       "model": "nova-3",
       "dataset": "overall",
-      "files": 2,
+      "files": 60,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 2.62,
-      "median_latency_s": 2.62,
+      "audio_hours": 0.1267,
+      "wer_percent": 6.63,
+      "mean_latency_s": 4.71,
+      "median_latency_s": 3.72,
       "price_per_hour_usd": 0.258,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
     },
     {
       "engine": "assemblyai",
       "model": "universal-3-5-pro",
       "dataset": "librispeech",
-      "files": 2,
+      "files": 20,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 7.27,
-      "median_latency_s": 7.27,
+      "audio_hours": 0.0457,
+      "wer_percent": 1.81,
+      "mean_latency_s": 8.34,
+      "median_latency_s": 6.68,
       "price_per_hour_usd": 0.21,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "assemblyai",
+      "model": "universal-3-5-pro",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 8.3,
+      "mean_latency_s": 9.53,
+      "median_latency_s": 7.02,
+      "price_per_hour_usd": 0.21,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "assemblyai",
+      "model": "universal-3-5-pro",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 8.59,
+      "mean_latency_s": 7.6,
+      "median_latency_s": 7.59,
+      "price_per_hour_usd": 0.21,
+      "tested_on": "2026-10-06"
     },
     {
       "engine": "assemblyai",
       "model": "universal-3-5-pro",
       "dataset": "overall",
-      "files": 2,
+      "files": 60,
       "files_excluded": 0,
-      "audio_hours": 0.0049,
-      "wer_percent": 0.0,
-      "mean_latency_s": 7.27,
-      "median_latency_s": 7.27,
+      "audio_hours": 0.1267,
+      "wer_percent": 5.71,
+      "mean_latency_s": 8.49,
+      "median_latency_s": 7.04,
       "price_per_hour_usd": 0.21,
-      "tested_on": "2026-10-05"
+      "tested_on": "2026-10-06"
     }
   ]
 }

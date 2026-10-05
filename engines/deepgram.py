@@ -16,7 +16,7 @@ import requests
 from .base import Engine, Transcription
 
 URL = "https://api.deepgram.com/v1/listen"
-RETRY_STATUS = {429, 500, 502, 503, 504}
+RETRY_STATUS = {408, 429, 500, 502, 503, 504}
 
 
 class Deepgram(Engine):
