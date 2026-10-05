@@ -1,0 +1,126 @@
+{
+  "dataset": "commonvoice",
+  "source": "fixie-ai/common_voice_17_0/en/test",
+  "files": [
+    {
+      "id": "commonvoice_000",
+      "file": "audio/commonvoice/commonvoice_000.flac",
+      "reference": "Joe Keaton disapproved of films, and Buster also had reservations about the medium.",
+      "duration_s": 6.3
+    },
+    {
+      "id": "commonvoice_001",
+      "file": "audio/commonvoice/commonvoice_001.flac",
+      "reference": "She'll be all right.",
+      "duration_s": 2.184
+    },
+    {
+      "id": "commonvoice_002",
+      "file": "audio/commonvoice/commonvoice_002.flac",
+      "reference": "Six",
+      "duration_s": 6.576
+    },
+    {
+      "id": "commonvoice_003",
+      "file": "audio/commonvoice/commonvoice_003.flac",
+      "reference": "All's well that ends well.",
+      "duration_s": 4.176
+    },
+    {
+      "id": "commonvoice_004",
+      "file": "audio/commonvoice/commonvoice_004.flac",
+      "reference": "It is a busy market town that serves a large surrounding area.",
+      "duration_s": 6.66
+    },
+    {
+      "id": "commonvoice_005",
+      "file": "audio/commonvoice/commonvoice_005.flac",
+      "reference": "We are going to the football game tonight.",
+      "duration_s": 3.744
+    },
+    {
+      "id": "commonvoice_006",
+      "file": "audio/commonvoice/commonvoice_006.flac",
+      "reference": "Elizabeth was about the same age as Maria.",
+      "duration_s": 6.84
+    },
+    {
+      "id": "commonvoice_007",
+      "file": "audio/commonvoice/commonvoice_007.flac",
+      "reference": "Do you mean it?",
+      "duration_s": 5.976
+    },
+    {
+      "id": "commonvoice_008",
+      "file": "audio/commonvoice/commonvoice_008.flac",
+      "reference": "How is Mozilla going to handle ambiguities like Queue and Cue?",
+      "duration_s": 7.056
+    },
+    {
+      "id": "commonvoice_009",
+      "file": "audio/commonvoice/commonvoice_009.flac",
+      "reference": "You are so rude!",
+      "duration_s": 3.096
+    },
+    {
+      "id": "commonvoice_010",
+      "file": "audio/commonvoice/commonvoice_010.flac",
+      "reference": "I guess you must think I'm kinda Batty.",
+      "duration_s": 3.6
+    },
+    {
+      "id": "commonvoice_011",
+      "file": "audio/commonvoice/commonvoice_011.flac",
+      "reference": "No one near the remote machine you could ring?",
+      "duration_s": 4.176
+    },
+    {
+      "id": "commonvoice_012",
+      "file": "audio/commonvoice/commonvoice_012.flac",
+      "reference": "Groves started writing songs when she was four years old.",
+      "duration_s": 7.032
+    },
+    {
+      "id": "commonvoice_013",
+      "file": "audio/commonvoice/commonvoice_013.flac",
+      "reference": "This led to both the Red terror and the White terror.",
+      "duration_s": 4.896
+    },
+    {
+      "id": "commonvoice_014",
+      "file": "audio/commonvoice/commonvoice_014.flac",
+      "reference": "The Sacramento valley rail station is just a short walk away.",
+      "duration_s": 7.38
+    },
+    {
+      "id": "commonvoice_015",
+      "file": "audio/commonvoice/commonvoice_015.flac",
+      "reference": "The most recent Presidents of the United States are Donald Trump, Barack Obama, and George W. Bush.",
+      "duration_s": 8.664
+    },
+    {
+      "id": "commonvoice_016",
+      "file": "audio/commonvoice/commonvoice_016.flac",
+      "reference": "There was nothing to hold him back except himself.",
+      "duration_s": 4.944
+    },
+    {
+      "id": "commonvoice_017",
+      "file": "audio/commonvoice/commonvoice_017.flac",
+      "reference": "These locomotives are serviced at Washwood Heath.",
+      "duration_s": 5.976
+    },
+    {
+      "id": "commonvoice_018",
+      "file": "audio/commonvoice/commonvoice_018.flac",
+      "reference": "It might be in this writer's top ten!",
+      "duration_s": 5.328
+    },
+    {
+      "id": "commonvoice_019",
+      "file": "audio/commonvoice/commonvoice_019.flac",
+      "reference": "We spoke often.",
+      "duration_s": 3.552
+    }
+  ]
+}

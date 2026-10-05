@@ -4,6 +4,7 @@ Usage: python download_datasets.py --dataset librispeech --num-files 20
 """
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -17,7 +18,7 @@ MANIFESTS = ROOT / "manifests"
 SOURCES = {
     "librispeech": ("openslr/librispeech_asr", "clean", "test", "text", {}),
     "voxpopuli": ("facebook/voxpopuli", "en", "test", "normalized_text", {}),
-    "commonvoice": ("mozilla-foundation/common_voice_17_0", "en", "test", "sentence", {}),
+    "commonvoice": ("fixie-ai/common_voice_17_0", "en", "test", "sentence", {}),
 }
 
 
@@ -73,6 +74,9 @@ def main():
             print(f"[skipped] {n}: {type(e).__name__}: {str(e)[:300]}", file=sys.stderr)
     if failed and args.dataset == "all":
         print(f"Skipped: {failed}", file=sys.stderr)
+    # HF streaming leaves background threads that can block interpreter exit
+    sys.stdout.flush(); sys.stderr.flush()
+    os._exit(0)
 
 
 if __name__ == "__main__":
