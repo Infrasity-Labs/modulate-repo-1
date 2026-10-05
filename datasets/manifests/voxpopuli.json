@@ -1,0 +1,126 @@
+{
+  "dataset": "voxpopuli",
+  "source": "facebook/voxpopuli/en/test",
+  "files": [
+    {
+      "id": "voxpopuli_000",
+      "file": "audio/voxpopuli/voxpopuli_000.wav",
+      "reference": "imposition of switching off the life supporting treatment is nothing else than euthanasia.",
+      "duration_s": 6.12
+    },
+    {
+      "id": "voxpopuli_001",
+      "file": "audio/voxpopuli/voxpopuli_001.wav",
+      "reference": "for beijing china's best known political prisoner and civil rights campaigner is simply a criminal but for chinese civil society and human rights defenders he has been the greatest source of inspiration in their peaceful struggle for democratic reform in communist china.",
+      "duration_s": 19.38
+    },
+    {
+      "id": "voxpopuli_002",
+      "file": "audio/voxpopuli/voxpopuli_002.wav",
+      "reference": "the common travel area however does not allow for the free movement of eu nationals.",
+      "duration_s": 5.06
+    },
+    {
+      "id": "voxpopuli_003",
+      "file": "audio/voxpopuli/voxpopuli_003.wav",
+      "reference": "the commission has to take strong action before july.",
+      "duration_s": 4.56
+    },
+    {
+      "id": "voxpopuli_004",
+      "file": "audio/voxpopuli/voxpopuli_004.wav",
+      "reference": "there will be clearer rights for travellers when something goes wrong during the trip and improved termination rights. travellers will be entitled to extended accommodation for at least three days if the return journey cannot be carried out on time because for example a natural disaster.",
+      "duration_s": 21.18
+    },
+    {
+      "id": "voxpopuli_005",
+      "file": "audio/voxpopuli/voxpopuli_005.wav",
+      "reference": "two thousand and ten finally we would also urge the commission to urge the member states to make greater use of the structural funds within the framework of the european social fund as a way of promoting equality between men and women.",
+      "duration_s": 15.978
+    },
+    {
+      "id": "voxpopuli_006",
+      "file": "audio/voxpopuli/voxpopuli_006.wav",
+      "reference": "we can make progress only if the european project is supported by european citizens in all member states.",
+      "duration_s": 5.979
+    },
+    {
+      "id": "voxpopuli_007",
+      "file": "audio/voxpopuli/voxpopuli_007.wav",
+      "reference": "it is outrageous to see a government in romania using the police and the secret service to intimidate political opponents restrict civil liberties and falsify elections.",
+      "duration_s": 11.18
+    },
+    {
+      "id": "voxpopuli_008",
+      "file": "audio/voxpopuli/voxpopuli_008.wav",
+      "reference": "so how can we act?",
+      "duration_s": 1.06
+    },
+    {
+      "id": "voxpopuli_009",
+      "file": "audio/voxpopuli/voxpopuli_009.wav",
+      "reference": "i watched in close up a legislative system that permits anonymous bureaucrats to generate so called law without any regard for the damage they do to the british economy and its businesses.",
+      "duration_s": 13.52
+    },
+    {
+      "id": "voxpopuli_010",
+      "file": "audio/voxpopuli/voxpopuli_010.wav",
+      "reference": "we will lose primary forests all around the world in a vain attempt to manage them sustainably.",
+      "duration_s": 5.699
+    },
+    {
+      "id": "voxpopuli_011",
+      "file": "audio/voxpopuli/voxpopuli_011.wav",
+      "reference": "we found that millions of legitimate jobs for our citizens have been lost that billions in taxes are not being paid and are lost how much our governments would appreciate those!",
+      "duration_s": 12.519
+    },
+    {
+      "id": "voxpopuli_012",
+      "file": "audio/voxpopuli/voxpopuli_012.wav",
+      "reference": "if not there will be a big crisis between you and the european parliament.",
+      "duration_s": 5.44
+    },
+    {
+      "id": "voxpopuli_013",
+      "file": "audio/voxpopuli/voxpopuli_013.wav",
+      "reference": "we must also strongly condemn the launch of ballistic missiles by the houthi rebels against the kingdom of saudi arabia and the use of sea mines.",
+      "duration_s": 8.28
+    },
+    {
+      "id": "voxpopuli_014",
+      "file": "audio/voxpopuli/voxpopuli_014.wav",
+      "reference": "but to be honest we have to do more.",
+      "duration_s": 2.4
+    },
+    {
+      "id": "voxpopuli_015",
+      "file": "audio/voxpopuli/voxpopuli_015.wav",
+      "reference": "mr president the march european council confirmed the eu's role as a promoter of the highest nuclear safety standards worldwide and in the eu neighbourhood.",
+      "duration_s": 9.94
+    },
+    {
+      "id": "voxpopuli_016",
+      "file": "audio/voxpopuli/voxpopuli_016.wav",
+      "reference": "it was difficult and it was not clear at the very beginning that we would make it and that we would have greater europeanisation in this area.",
+      "duration_s": 7.8
+    },
+    {
+      "id": "voxpopuli_017",
+      "file": "audio/voxpopuli/voxpopuli_017.wav",
+      "reference": "we know that they renege on their commitments.",
+      "duration_s": 2.58
+    },
+    {
+      "id": "voxpopuli_018",
+      "file": "audio/voxpopuli/voxpopuli_018.wav",
+      "reference": "we have to go and ask for solidarity for the sector within the sector because we have seen that none of the sector's players could solve the problem and we have to seek solidarity within europe because bp is a european company;",
+      "duration_s": 13.119
+    },
+    {
+      "id": "voxpopuli_019",
+      "file": "audio/voxpopuli/voxpopuli_019.wav",
+      "reference": "while i respect one country two systems' i find it shocking that a country run by a communist party appears to be advocating a system which gives representation only to those with wealth and privilege.",
+      "duration_s": 11.66
+    }
+  ]
+}
