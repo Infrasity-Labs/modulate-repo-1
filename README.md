@@ -1,12 +1,89 @@
-# velma-stt-benchmark
+# Speech-to-Text Benchmark for Velma Transcribe
 
-A speech-to-text benchmark CLI for Modulate's Velma Transcribe API. One CLI, one file per engine, shared scoring, results checked into the repo.
+A reproducible speech-to-text benchmark built around [Modulate's Velma Transcribe](https://www.modulate.ai) batch API. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
-> **Status: Velma only.** No other engine has been run yet. The table below is not a comparison. Deepgram, AssemblyAI and two generic slots are empty placeholders until their keys are added.
+> **Status: Velma only.** Deepgram, AssemblyAI and two generic engines are empty slots that have not been run. Nothing below is a comparison between vendors yet.
 
-## Results (Velma English Fast, batch)
+## Table of contents
 
-Tested on 2026-10-05 from a local macOS machine, over the public internet, one file at a time, 20 files per dataset. Test location (city/region): _to be filled in by the person running the final numbers_.
+- [Data](#data)
+- [Metrics](#metrics)
+- [Engines](#engines)
+- [Usage](#usage)
+- [Results](#results)
+- [Text normalisation](#text-normalisation)
+- [Adding a new engine](#adding-a-new-engine)
+- [Repository layout](#repository-layout)
+- [Limitations](#limitations)
+
+## Data
+
+20 files per dataset, English. Audio is downloaded on demand into `datasets/audio/` and is **not** committed. The files used are recorded in `datasets/manifests/<dataset>.json` (id, path, reference transcript, duration).
+
+| Dataset | Source | Slice | Audio |
+|---|---|---|---|
+| LibriSpeech | `openslr/librispeech_asr`, `clean`, `test` | first 20 | 164 s |
+| VoxPopuli | `facebook/voxpopuli`, `en`, `test` | first 20 | 183 s |
+| Common Voice | `fixie-ai/common_voice_17_0`, `en`, `test` (parquet mirror of Mozilla Common Voice 17) | first 20 | 108 s |
+
+## Metrics
+
+| Metric | Definition |
+|---|---|
+| WER | Word error rate with [`jiwer`](https://github.com/jitsi/jiwer), computed over the whole slice (total errors divided by total reference words) after [normalisation](#text-normalisation). Lower is better. |
+| Latency | Wall-clock seconds for one request (upload plus transcription, including network), reported as mean and median over files. Files are sent one at a time. This is batch latency, not streaming latency. |
+| Cost per audio hour | The vendor's published price in USD per hour of audio. It is a price lookup, not a measurement, so it is identical across datasets for a given model. Left blank when a price is unknown. |
+
+## Engines
+
+| Engine | File | Status | Model(s) | Price (USD per audio hour, batch) |
+|---|---|---|---|---|
+| Velma Transcribe | `engines/velma.py` | tested | `english-fast` (default), `multilingual`, `multilingual-fast` | 0.025, 0.03, 0.03 ([pricing](https://www.modulate.ai/api-pricing)) |
+| Deepgram | `engines/deepgram.py` | slot, not configured | | |
+| AssemblyAI | `engines/assemblyai.py` | slot, not configured | | |
+| Slot A | `engines/slot_a.py` | slot, not configured | | |
+| Slot B | `engines/slot_b.py` | slot, not configured | | |
+
+Velma API details come from the [official docs](https://docs.modulate.ai/api-reference/stt/batch-english-vfast): `POST https://platform.modulate.ai/api/velma-2-stt-batch-english-vfast`, header `X-API-Key`, multipart field `upload_file`, response fields `text` and `duration_ms`. The wrapper retries 429, 502, 503 and 504 with exponential backoff and fails fast on other errors. Only the English Fast model has been benchmarked so far.
+
+## Usage
+
+```bash
+git clone https://github.com/Infrasity-Labs/modulate-repo-1 && cd modulate-repo-1
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env            # set VELMA_API_KEY in .env
+```
+
+The API key is read from the environment only. `.env` is git-ignored. Never commit keys.
+
+```bash
+# 1. fetch the data slices (audio is git-ignored, manifests are committed)
+python download_datasets.py --dataset all --num-files 20
+
+# 2. run an engine
+python benchmark.py --engine velma --dataset librispeech --num-files 20
+python benchmark.py --engine velma --dataset voxpopuli --num-files 20
+python benchmark.py --engine velma --dataset commonvoice --num-files 20
+
+# 3. rebuild the table and plots from results/
+python benchmark.py --report
+
+# tests (fake text, no API needed)
+python -m pytest
+```
+
+| Flag | Meaning |
+|---|---|
+| `--engine` | `velma`, `deepgram`, `assemblyai`, `slot_a`, `slot_b` (unconfigured engines exit with a clear message) |
+| `--dataset` | `librispeech`, `voxpopuli`, `commonvoice` |
+| `--num-files` | number of files from the manifest (default 20) |
+| `--model` | engine model variant, for Velma `english-fast`, `multilingual` or `multilingual-fast` |
+| `--report` | regenerate `results/results.csv`, `results/results.md` and `results/plots/` |
+
+## Results
+
+**Velma only, English Fast model, batch API.** Tested on 2026-10-05 from a local macOS machine over the public internet. Test location (city or region): _to be filled in._ The Deepgram, AssemblyAI and slot rows have not been run.
 
 | Engine | Model | Dataset | Files | WER % | Mean latency (s) | Median latency (s) | USD per audio hour | Tested on |
 |---|---|---|---|---|---|---|---|---|
@@ -18,61 +95,31 @@ Tested on 2026-10-05 from a local macOS machine, over the public internet, one f
 | slot_a | | | | not run | | | | |
 | slot_b | | | | not run | | | | |
 
-Generated files: `results/results.csv`, `results/results.md`, `results/wer.png`, `results/latency.png`, `results/cost_per_hour.png`. Per-file transcripts are in `results/<engine>_<dataset>.json`.
+Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md). Per-file transcripts, references and latencies: `results/<engine>_<dataset>.json`.
 
-Notes on the numbers:
-- Samples are small (20 files, 108 to 184 seconds of audio per dataset). One bad file moves CommonVoice WER noticeably.
-- Latency is wall-clock time for one upload plus transcription call and includes network time. It is not a streaming latency.
-- Price is Modulate's published batch price per hour of audio (https://www.modulate.ai/api-pricing): English Fast $0.025, Multilingual $0.03, Multilingual Fast $0.03.
+### Word error rate
 
-## Setup
+![WER](results/plots/wer.png)
 
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env        # then put your key in VELMA_API_KEY
-```
+### Latency
 
-The key is read from the environment only. `.env` is git-ignored.
+![Latency](results/plots/latency.png)
 
-## Run
+### Cost per audio hour
 
-```bash
-python download_datasets.py --dataset all --num-files 20      # writes audio (git-ignored) and manifests
-python benchmark.py --engine velma --dataset librispeech --num-files 20
-python benchmark.py --engine velma --dataset voxpopuli --num-files 20
-python benchmark.py --engine velma --dataset commonvoice --num-files 20
-python benchmark.py --report                                   # rebuild table and plots
-python -m pytest                                               # scoring unit tests, no API needed
-```
+![Cost per hour](results/plots/cost_per_hour.png)
 
-Use `--model multilingual` or `--model multilingual-fast` to pick another Velma model (default `english-fast`).
+### Observations
 
-## Layout
-
-```
-benchmark.py            single CLI entry point
-download_datasets.py    downloads slices, writes manifests
-engines/                base.py plus one file per engine
-scoring/                normalize.py and wer.py, shared by every engine
-datasets/manifests/     list of files used (audio is not committed)
-results/                CSV, markdown, plots, per-file transcripts
-tests/                  unit tests with fake text
-```
-
-## Datasets
-
-| Dataset | Source | Slice |
-|---|---|---|
-| LibriSpeech | `openslr/librispeech_asr`, config `clean`, split `test` | first 20 files |
-| VoxPopuli | `facebook/voxpopuli`, `en`, split `test` | first 20 files |
-| CommonVoice | `fixie-ai/common_voice_17_0`, `en`, split `test` (a parquet mirror of Mozilla Common Voice 17) | first 20 files |
-
-Audio is stored under `datasets/audio/` and is not committed. The manifests in `datasets/manifests/` record the exact files, references and durations used.
+- WER rises from clean read speech (LibriSpeech) to parliamentary speech (VoxPopuli) to crowd-sourced recordings (Common Voice), which is the expected order.
+- No empty outputs and no wrong-language output in the 60 files.
+- One Common Voice clip (`commonvoice_010`, reference "I guess you must think I'm kinda Batty.", output "Russians can't handle Bhakti.") is a full miss and accounts for a large share of the 9.2%. We have not established whether it is a recognition error or a poor reference.
+- Some VoxPopuli errors are dropped or altered words, for example a sentence truncated at the end.
+- Part of the remaining WER is formatting that the normaliser does not unify, such as "all's" against "all is" and "honour" against "honor".
 
 ## Text normalisation
 
-Every engine's output and every reference goes through `scoring/normalize.py` before WER. The rules, in order:
+Every engine's output and every reference passes through `scoring/normalize.py` before scoring. Rules, in order:
 
 1. Unicode NFKC, then lowercase.
 2. Curly apostrophes become straight apostrophes.
@@ -83,20 +130,33 @@ Every engine's output and every reference goes through `scoring/normalize.py` be
 7. All other punctuation is removed. Apostrophes inside words are kept.
 8. Whitespace is collapsed.
 
-WER is computed with `jiwer` over the whole set (total errors divided by total reference words). Pairs with an empty reference are dropped. An empty hypothesis counts as all deletions.
-
-Known limits: the normaliser does not expand contractions ("all's" vs "all is" counts as errors) and does not unify British and American spelling ("honour" vs "honor"). These affect every engine equally.
+Pairs with an empty reference are dropped. An empty hypothesis counts as all deletions. No engine-specific cleanup is allowed.
 
 ## Adding a new engine
 
-1. Open the placeholder in `engines/` (`deepgram.py`, `assemblyai.py`, `slot_a.py`, `slot_b.py`) or copy `engines/velma.py`.
-2. Subclass `Engine`, set `name` and `price_per_hour` (USD per audio hour, from the vendor's published price, or `None` if unknown), read the key from the environment, and implement `transcribe(audio_path)` returning a `Transcription` with the text and measured latency.
+1. Open the placeholder in `engines/` or copy `engines/velma.py`.
+2. Subclass `Engine`, set `name` and `price_per_hour` (USD per audio hour from the vendor's published price, or `None` if unknown), read the key from the environment, and implement `transcribe(audio_path)` returning a `Transcription` (text and measured latency).
 3. Register the class in `engines/__init__.py`.
-4. Add the key name to `.env.example` and your `.env`.
+4. Add the key name to `.env.example` and set it in your `.env`.
 5. Run `python benchmark.py --engine <name> --dataset <dataset>` for each dataset, then `python benchmark.py --report`.
 
-Do not hardcode keys, and do not apply engine-specific text cleanup. Scoring must stay shared.
+## Repository layout
 
-## Velma API reference used
+```
+benchmark.py            single CLI entry point (run and report)
+download_datasets.py    downloads slices and writes manifests
+engines/                base.py plus one file per engine
+scoring/                normalize.py and wer.py, shared by all engines
+tests/                  unit tests on fake text
+datasets/manifests/     files used (audio is git-ignored)
+results/                results.csv, results.md, per-file JSON
+results/plots/          wer.png, latency.png, cost_per_hour.png
+```
 
-Endpoint `POST https://platform.modulate.ai/api/velma-2-stt-batch-english-vfast` (also `velma-2-stt-batch` and `velma-2-stt-batch-multilingual-vfast`), header `X-API-Key`, multipart field `upload_file`, JSON response with `text` and `duration_ms`. See https://docs.modulate.ai/api-reference/stt/batch-english-vfast. The wrapper retries 429, 502, 503 and 504 with exponential backoff and fails fast on other errors.
+## Limitations
+
+- Small samples (20 files per dataset), so a single file can shift WER noticeably.
+- Latency includes network time from the test machine and varies by location and connection.
+- Common Voice comes from a third-party Hugging Face mirror, not Mozilla's own distribution.
+- English only so far.
+- The Velma docs do not state rate limits.

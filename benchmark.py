@@ -22,6 +22,7 @@ from scoring.wer import compute_wer
 ROOT = Path(__file__).parent
 DATASETS = ROOT / "datasets"
 RESULTS = ROOT / "results"
+PLOTS = RESULTS / "plots"
 PLACEHOLDER_ENGINES = ["deepgram", "assemblyai", "slot_a", "slot_b"]
 FIELDS = ["engine", "model", "dataset", "files", "audio_hours", "wer_percent",
           "mean_latency_s", "median_latency_s", "price_per_hour_usd", "tested_on"]
@@ -103,6 +104,7 @@ def plot(summaries):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    PLOTS.mkdir(parents=True, exist_ok=True)
     datasets = sorted({s["dataset"] for s in summaries})
     engines = list(dict.fromkeys(s["engine"] for s in summaries))
 
@@ -118,7 +120,7 @@ def plot(summaries):
         ax.set_xticks([j + width * (len(engines) - 1) / 2 for j in range(len(datasets))])
         ax.set_xticklabels(datasets)
         ax.set_ylabel(ylabel); ax.set_title(title); ax.legend()
-        fig.tight_layout(); fig.savefig(RESULTS / fname, dpi=150); plt.close(fig)
+        fig.tight_layout(); fig.savefig(PLOTS / fname, dpi=150); plt.close(fig)
 
     bars("wer_percent", "WER (%), lower is better", "wer.png", "Word error rate")
     bars("median_latency_s", "Median latency (s)", "latency.png", "Latency per file")
