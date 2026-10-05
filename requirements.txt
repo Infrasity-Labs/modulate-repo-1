@@ -6,3 +6,4 @@ datasets>=3.0
 soundfile>=0.12
 num2words>=0.5.13
 pytest>=8.0
+whisper-normalizer>=0.1.12

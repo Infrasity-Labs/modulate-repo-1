@@ -27,6 +27,10 @@ def test_percent_and_tags():
     assert normalize("50% [laughter] done") == "fifty percent done"
 
 
+def test_british_american_spelling_unified():
+    assert normalize("travellers honour colour") == normalize("travelers honor color")
+
+
 def test_empty():
     assert normalize("") == ""
     assert normalize(None) == ""

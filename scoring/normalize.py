@@ -3,6 +3,9 @@ import re
 import unicodedata
 
 from num2words import num2words
+from whisper_normalizer.english import EnglishSpellingNormalizer
+
+_SPELLING = EnglishSpellingNormalizer()  # British to American spelling map
 
 _NUM = re.compile(r"\d+(?:[.,]\d+)*(?:st|nd|rd|th)?")
 
@@ -30,4 +33,5 @@ def normalize(text: str) -> str:
     text = re.sub(r"[^\w\s']", " ", text)  # punctuation removed, apostrophes kept
     text = re.sub(r"(?<!\w)'|'(?!\w)", " ", text)  # stray quote marks
     text = text.replace("_", " ")
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
+    return _SPELLING(text)
