@@ -110,6 +110,8 @@ Test run: started 2026-10-05 22:51 and finished 2026-10-06 00:20 (local time of 
 | overall | deepgram | nova-3 | 60 | 0 | 6.63 | 4.71 | 3.72 | 0.258 |
 | overall | assemblyai | universal-3-5-pro | 60 | 0 | 5.71 | 8.49 | 7.04 | 0.21 |
 
+Earlier Velma-only results from phase 1 (single call per file, older normaliser, not comparable with the table above) are archived in [`results/phase1_velma/`](results/phase1_velma/).
+
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and per-repeat latencies: `results/<engine>_<dataset>.json`.
 
 ### Word error rate
