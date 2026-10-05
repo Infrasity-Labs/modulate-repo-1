@@ -1,9 +1,8 @@
-| Engine | Model | Dataset | Files | WER % | Mean latency (s) | Median latency (s) | USD per audio hour | Tested on |
+| Dataset | Engine | Model | Files | Excluded | WER % | Mean latency (s) | Median latency (s) | USD per audio hour |
 |---|---|---|---|---|---|---|---|---|
-| velma | english-fast | commonvoice | 20 | 9.2 | 4.69 | 3.93 | 0.025 | 2026-10-05 |
-| velma | english-fast | librispeech | 20 | 0.91 | 4.41 | 3.63 | 0.025 | 2026-10-05 |
-| velma | english-fast | voxpopuli | 20 | 4.77 | 5.41 | 4.58 | 0.025 | 2026-10-05 |
-| deepgram | | | | not run | | | | |
-| assemblyai | | | | not run | | | | |
-| slot_a | | | | not run | | | | |
-| slot_b | | | | not run | | | | |
+| librispeech | velma | english-fast | 2 | 0 | 0.0 | 5.18 | 5.18 | 0.025 |
+| librispeech | deepgram | nova-3 | 2 | 0 | 0.0 | 2.62 | 2.62 | 0.258 |
+| librispeech | assemblyai | universal-3-5-pro | 2 | 0 | 0.0 | 7.27 | 7.27 | 0.21 |
+| overall | velma | english-fast | 2 | 0 | 0.0 | 5.18 | 5.18 | 0.025 |
+| overall | deepgram | nova-3 | 2 | 0 | 0.0 | 2.62 | 2.62 | 0.258 |
+| overall | assemblyai | universal-3-5-pro | 2 | 0 | 0.0 | 7.27 | 7.27 | 0.21 |

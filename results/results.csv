@@ -1,4 +1,7 @@
-engine,model,dataset,files,audio_hours,wer_percent,mean_latency_s,median_latency_s,price_per_hour_usd,tested_on
-velma,english-fast,commonvoice,20,0.03,9.2,4.69,3.93,0.025,2026-10-05
-velma,english-fast,librispeech,20,0.0457,0.91,4.41,3.63,0.025,2026-10-05
-velma,english-fast,voxpopuli,20,0.051,4.77,5.41,4.58,0.025,2026-10-05
+engine,model,dataset,files,files_excluded,audio_hours,wer_percent,mean_latency_s,median_latency_s,price_per_hour_usd,tested_on
+velma,english-fast,librispeech,2,0,0.0049,0.0,5.18,5.18,0.025,2026-10-05
+deepgram,nova-3,librispeech,2,0,0.0049,0.0,2.62,2.62,0.258,2026-10-05
+assemblyai,universal-3-5-pro,librispeech,2,0,0.0049,0.0,7.27,7.27,0.21,2026-10-05
+velma,english-fast,overall,2,0,0.0049,0.0,5.18,5.18,0.025,2026-10-05
+deepgram,nova-3,overall,2,0,0.0049,0.0,2.62,2.62,0.258,2026-10-05
+assemblyai,universal-3-5-pro,overall,2,0,0.0049,0.0,7.27,7.27,0.21,2026-10-05

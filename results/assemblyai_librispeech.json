@@ -1,15 +1,15 @@
 {
   "summary": {
-    "engine": "velma",
-    "model": "english-fast",
+    "engine": "assemblyai",
+    "model": "universal-3-5-pro",
     "dataset": "librispeech",
     "files": 2,
     "files_excluded": 0,
     "audio_hours": 0.0049,
     "wer_percent": 0.0,
-    "mean_latency_s": 5.18,
-    "median_latency_s": 5.18,
-    "price_per_hour_usd": 0.025,
+    "mean_latency_s": 7.27,
+    "median_latency_s": 7.27,
+    "price_per_hour_usd": 0.21,
     "tested_on": "2026-10-05"
   },
   "files": [
@@ -18,11 +18,11 @@
       "reference": "CONCORD RETURNED TO ITS PLACE AMIDST THE TENTS",
       "duration_s": 3.505,
       "excluded": false,
-      "hypothesis": "concord returned to its place amidst the tents",
+      "hypothesis": "Concord returned to its place amidst the tents.",
       "latencies_s": [
-        5.102
+        6.134
       ],
-      "mean_latency_s": 5.102,
+      "mean_latency_s": 6.134,
       "empty": false
     },
     {
@@ -30,11 +30,11 @@
       "reference": "THE ENGLISH FORWARDED TO THE FRENCH BASKETS OF FLOWERS OF WHICH THEY HAD MADE A PLENTIFUL PROVISION TO GREET THE ARRIVAL OF THE YOUNG PRINCESS THE FRENCH IN RETURN INVITED THE ENGLISH TO A SUPPER WHICH WAS TO BE GIVEN THE NEXT DAY",
       "duration_s": 14.225,
       "excluded": false,
-      "hypothesis": "the english forwarded to the french baskets of flowers of which they had made a plentiful provision to greet the arrival of the young princess the french in return invited the english to a supper which was to be given the next day",
+      "hypothesis": "The English forwarded to the French baskets of flowers, of which they had made a plentiful provision to greet the arrival of the young princess. The French, in return, invited the English to a supper which was to be given the next day.",
       "latencies_s": [
-        5.263
+        8.412
       ],
-      "mean_latency_s": 5.263,
+      "mean_latency_s": 8.412,
       "empty": false
     }
   ]
