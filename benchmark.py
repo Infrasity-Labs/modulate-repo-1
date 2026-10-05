@@ -31,7 +31,7 @@ FIELDS = ["engine", "model", "dataset", "files", "audio_hours", "wer_percent",
 def run(engine_name, dataset, num_files, model):
     manifest = json.loads((DATASETS / "manifests" / f"{dataset}.json").read_text())
     files = manifest["files"][:num_files]
-    kwargs = {"model": model} if model and engine_name == "velma" else {}
+    kwargs = {"model": model} if model else {}
     engine = ENGINES[engine_name](**kwargs)
     rows, refs, hyps, lats = [], [], [], []
     for i, e in enumerate(files, 1):
