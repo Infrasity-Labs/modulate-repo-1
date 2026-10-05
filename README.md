@@ -110,7 +110,17 @@ Test run: started 2026-10-05 22:51 and finished 2026-10-06 00:20 (local time of 
 | overall | deepgram | nova-3 | 60 | 0 | 6.63 | 4.71 | 3.72 | 0.258 |
 | overall | assemblyai | universal-3-5-pro | 60 | 0 | 5.71 | 8.49 | 7.04 | 0.21 |
 
-Earlier Velma-only results from phase 1 (single call per file, older normaliser, not comparable with the table above) are archived in [`results/phase1_velma/`](results/phase1_velma/).
+### Earlier Velma run (phase 1)
+
+Velma was also run on its own earlier, on 2026-10-05, before the other engines were added. It is shown here for the record and is **not** directly comparable with the table above: one call per file instead of 3 repeats, a different time and network condition, and scoring without the British to American spelling rule. Same model and same 20 files per dataset. Files are archived in [`results/phase1_velma/`](results/phase1_velma/).
+
+| Run | Dataset | Engine | Model | Files | WER % | Mean latency (s) | Median latency (s) | USD per audio hour |
+|---|---|---|---|---|---|---|---|---|
+| phase 1 | librispeech | velma | english-fast | 20 | 0.91 | 4.41 | 3.63 | 0.025 |
+| phase 1 | voxpopuli | velma | english-fast | 20 | 4.77 | 5.41 | 4.58 | 0.025 |
+| phase 1 | commonvoice | velma | english-fast | 20 | 9.2 | 4.69 | 3.93 | 0.025 |
+
+Velma's latency in this earlier run was lower than in the main session (for example Common Voice mean 4.69 s against 18.64 s), which is consistent with Velma's latency varying over time rather than being fixed. Only one call per file was made in the earlier run, so it is a weaker measurement.
 
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and per-repeat latencies: `results/<engine>_<dataset>.json`.
 
