@@ -154,6 +154,7 @@ def report():
 
 
 def plot(summaries):
+    import numpy as np
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -162,23 +163,102 @@ def plot(summaries):
     datasets = [d for d in [*ALL_DATASETS, "overall"] if any(s["dataset"] == d for s in summaries)]
     engines = list(dict.fromkeys(s["engine"] for s in summaries))
 
-    def bars(key, ylabel, fname, title):
-        fig, ax = plt.subplots(figsize=(8, 4.5))
-        width = 0.8 / len(engines)
-        for i, e in enumerate(engines):
-            for j, d in enumerate(datasets):
-                v = next((s[key] for s in summaries if s["engine"] == e and s["dataset"] == d), None)
-                if v is not None:
-                    b = ax.bar(j + i * width, v, width, color=f"C{i}", label=e if j == 0 else None)
-                    ax.annotate(f"{v:g}", (j + i * width, v), ha="center", va="bottom", fontsize=7)
-        ax.set_xticks([j + width * (len(engines) - 1) / 2 for j in range(len(datasets))])
-        ax.set_xticklabels(datasets)
-        ax.set_ylabel(ylabel); ax.set_title(title); ax.legend()
-        fig.tight_layout(); fig.savefig(PLOTS / fname, dpi=150); plt.close(fig)
+    dataset_display = {
+        "librispeech": "LibriSpeech",
+        "voxpopuli": "VoxPopuli",
+        "commonvoice": "Common Voice",
+        "overall": "Overall",
+    }
+    engine_display = {
+        "velma": "Velma (Fast)",
+        "deepgram": "Deepgram (nova-3)",
+        "assemblyai": "AssemblyAI (3.5 Pro)",
+    }
+    engine_palette = {
+        "velma": "#4F46E5",       # Vibrant Indigo
+        "deepgram": "#0EA5E9",    # Sky Blue
+        "assemblyai": "#F43F5E",  # Rose Red
+        "slot_a": "#10B981",      # Emerald
+        "slot_b": "#F59E0B",      # Amber
+    }
 
-    bars("wer_percent", "WER (%), lower is lower error", "wer.png", "Word error rate")
-    bars("mean_latency_s", "Mean latency per file (s)", "latency.png", "Latency per file")
-    bars("price_per_hour_usd", "USD per hour of audio", "cost_per_hour.png", "Published price per audio hour")
+    def render_chart(key, ylabel, fname, title, subtitle, unit="", is_currency=False):
+        fig, ax = plt.subplots(figsize=(9, 4.8), dpi=200)
+        fig.patch.set_facecolor("#FAFAFB")
+        ax.set_facecolor("#FFFFFF")
+
+        n = len(engines)
+        x = np.arange(len(datasets))
+        total_width = 0.72
+        width = total_width / n
+
+        max_val = 0
+        for i, e in enumerate(engines):
+            vals = []
+            for d in datasets:
+                s = next((row for row in summaries if row["engine"] == e and row["dataset"] == d), None)
+                vals.append(s[key] if s and s.get(key) is not None else 0)
+            max_val = max(max_val, max(vals) if vals else 0)
+
+            offset = (i - (n - 1) / 2) * width
+            color = engine_palette.get(e, f"C{i}")
+            label = engine_display.get(e, e)
+            rects = ax.bar(x + offset, vals, width * 0.88, label=label,
+                           color=color, alpha=0.92, edgecolor="none", zorder=3)
+
+            for rect, val in zip(rects, vals):
+                if val > 0:
+                    h = rect.get_height()
+                    if is_currency:
+                        txt = f"${val:.3f}"
+                    elif unit == "%":
+                        txt = f"{val:g}%"
+                    else:
+                        txt = f"{val:.2f}{unit}"
+                    ax.annotate(
+                        txt,
+                        xy=(rect.get_x() + rect.get_width() / 2, h),
+                        xytext=(0, 4),
+                        textcoords="offset points",
+                        ha="center", va="bottom",
+                        fontsize=8.5, fontweight="bold",
+                        color="#334155"
+                    )
+
+        ax.set_title(title, fontsize=13, fontweight="bold", color="#0F172A", pad=22, loc="left")
+        ax.text(0.0, 1.025, subtitle, transform=ax.transAxes, fontsize=9, color="#64748B", va="bottom")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels([dataset_display.get(d, d) for d in datasets], fontsize=9.5, fontweight="600", color="#334155")
+        ax.set_ylabel(ylabel, fontsize=9.5, fontweight="600", color="#475569", labelpad=8)
+
+        ax.set_ylim(0, max(max_val * 1.28, 0.1))
+        ax.tick_params(colors="#64748B", which="both", labelsize=8.5)
+        ax.grid(axis="y", linestyle="--", alpha=0.5, color="#E2E8F0", zorder=0)
+        ax.grid(axis="x", visible=False)
+
+        for spine in ["top", "right"]:
+            ax.spines[spine].set_visible(False)
+        for spine in ["left", "bottom"]:
+            ax.spines[spine].set_color("#CBD5E1")
+            ax.spines[spine].set_linewidth(1)
+
+        ax.legend(frameon=True, facecolor="#FFFFFF", edgecolor="#E2E8F0",
+                  fontsize=9, loc="upper right", framealpha=0.95)
+
+        fig.tight_layout()
+        fig.savefig(PLOTS / fname, dpi=200, bbox_inches="tight")
+        plt.close(fig)
+
+    render_chart("wer_percent", "Word Error Rate (%)", "wer.png",
+                 "Word Error Rate (WER) by Dataset",
+                 "Lower is better · % of word errors across benchmark test slices", unit="%")
+    render_chart("mean_latency_s", "Mean Latency (s)", "latency.png",
+                 "Latency per File Comparison",
+                 "Lower is faster · Request duration including network transfer and inference", unit="s")
+    render_chart("price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
+                 "Pricing Comparison: USD per Audio Hour",
+                 "Lower is cheaper · Published vendor pre-recorded (batch) API rates", is_currency=True)
 
 
 def main():
