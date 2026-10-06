@@ -259,7 +259,8 @@ def plot(summaries):
                         xytext=(0, 4),
                         textcoords="offset points",
                         ha="center", va="bottom",
-                        fontsize=8.5, fontweight="bold",
+                        rotation=0 if n <= 5 else 90,
+                        fontsize=8.5 if n <= 5 else 7.5, fontweight="bold",
                         color="#334155"
                     )
 
@@ -270,7 +271,7 @@ def plot(summaries):
         ax.set_xticklabels([dataset_display.get(d, d) for d in datasets], fontsize=9.5, fontweight="600", color="#334155")
         ax.set_ylabel(ylabel, fontsize=9.5, fontweight="600", color="#475569", labelpad=8)
 
-        ax.set_ylim(0, max(max_val * 1.28, 0.1))
+        ax.set_ylim(0, max(max_val * (1.28 if n <= 5 else 1.4), 0.1))
         ax.tick_params(colors="#64748B", which="both", labelsize=8.5)
         ax.grid(axis="y", linestyle="--", alpha=0.5, color="#E2E8F0", zorder=0)
         ax.grid(axis="x", visible=False)
@@ -299,7 +300,7 @@ def plot(summaries):
     if local:
         render_chart(local, "mean_latency_s", "Mean Latency (s)", "latency_local.png",
                      "Latency per File: Local Engines",
-                     "Measured on one local machine (CPU), no network · not comparable with hosted latency", unit="s")
+                     "Measured on one local machine, no network (Moonshine on CPU, whisper.cpp on Metal GPU) · not comparable with hosted latency", unit="s")
     priced = [s for s in hosted if s.get("price_per_hour_usd") is not None]
     render_chart(priced, "price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
                  "Pricing Comparison: USD per Audio Hour",
