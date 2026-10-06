@@ -4,6 +4,8 @@ A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https:
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking. See [Limitations](#limitations).
 
+![Benchmark overview: word error rate, latency, cost and accuracy against speed for every engine](results/plots/overview.png)
+
 ## Table of contents
 
 - [Data](#data)
@@ -175,7 +177,7 @@ Test machine: Apple M1 Pro, 16 GB RAM, macOS 26.3, CPU inference (float32), Pyth
 
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and latencies: `results/<engine>_<dataset>.json`.
 
-Each chart below puts every engine in a single image, using all 60 files. Hatched bars and square markers are engines that run locally on the test machine.
+Each chart puts every engine in a single image, using all 60 files. HOSTED API and LOCAL tags mark where an engine runs; local engines also show their model size on disk. In the scatter plot, rings are local engines.
 
 ### Word error rate
 
@@ -197,7 +199,7 @@ Per dataset: [`results/plots/latency_by_dataset.png`](results/plots/latency_by_d
 
 ### Cost per audio hour
 
-Hosted engines show the published API rate. The local engines (Moonshine, whisper.cpp) have no API charge and are shown at $0; local compute and electricity are not counted.
+Hosted engines show the published API rate. The local engines (Moonshine, whisper.cpp) have no API charge and are shown at $0; local compute and electricity are not counted. Model sizes shown for local engines are the files on disk (Moonshine from the Hugging Face cache, whisper.cpp from its README).
 
 ![Cost per hour](results/plots/cost_per_hour.png)
 
@@ -205,7 +207,7 @@ Hosted engines show the published API rate. The local engines (Moonshine, whispe
 
 - **One Common Voice clip is unusable.** For `commonvoice_010` (reference "I guess you must think I'm kinda Batty.") all three engines fail differently: Velma returned "Russians can't handle Bhakti.", Deepgram returned an empty transcript, and AssemblyAI returned "question was written on the paper". This points to a problem with the clip or its reference, not with one engine. It is kept in the tables because exclusion is only applied to engine failures. Without it, Common Voice WER is 5.16 for Velma, 7.74 for Deepgram and 3.87 for AssemblyAI, and overall WER is 3.15, 5.94 and 5.01.
 - **Chirp 3 and MAI-Transcribe 2 on `commonvoice_010`.** Both also fail on this clip (with the language pinned to English they return unrelated English text), so all engines fail on it.
-- **Pricing for the local models.** Moonshine and whisper.cpp run locally, so there is no API charge and they are shown at $0. No published hosted price was found for Moonshine or for Whisper tiny and base: DeepInfra's speech-to-text list shows only Whisper large-v3 ($0.00045 per minute) and large-v3-turbo ($0.0002 per minute), which are different models, and OpenRouter's transcription list has no Moonshine or Whisper tiny/base entries. No price is estimated for them.
+- **Pricing for the local models.** Moonshine and whisper.cpp run locally, so there is no API charge and they are shown at $0. No published hosted price was found for Moonshine or for Whisper tiny and base: DeepInfra's speech-to-text list shows only Whisper large-v3 ($0.00045 per minute) and large-v3-turbo ($0.0002 per minute), which are different models, and OpenRouter's transcription list has no Moonshine or Whisper tiny/base entries. No price is estimated for them. Picovoice's benchmark reports no prices either: for local engines it reports Core-Hour (CPU hours per audio hour) and model size, and omits both for cloud engines. Model size is shown here; Core-Hour was not measured.
 - **Latency varies with network conditions.** Latency includes upload from the test machine and depends on network conditions and server load at the time.
 - **Part of the WER is reference style, not recognition.** LibriSpeech references contain "to day" and "to morrow", while Deepgram and AssemblyAI write "today" and "tomorrow". AssemblyAI wrote "2010" for the spoken "two thousand and ten", which the number rule renders without "and". Neither engine is wrong about the audio.
 - **Contractions and possessives.** All engines drop the possessive in "country's" and "master's" in one LibriSpeech file, and "all's" against "all is" counts as an error for engines that write the latter.
@@ -245,13 +247,14 @@ Pairs with an empty reference are dropped. An empty hypothesis counts as all del
 
 ```
 benchmark.py            single CLI entry point (run and report)
+plots.py                dashboard-style charts used by `--report`
 download_datasets.py    downloads slices and writes manifests
 engines/                base.py plus one file per engine (openrouter_stt.py and whisper_hf.py hosted; moonshine_local.py and whisper_cpp_local.py local)
 scoring/                normalize.py and wer.py, shared by all engines
 tests/                  unit tests on fake text
 datasets/manifests/     files used (audio is git-ignored)
 results/                results.csv, results.md, session.json, per-file JSON
-results/plots/          wer.png, latency.png, wer_vs_latency.png, cost_per_hour.png (all engines each), plus wer_by_dataset.png and latency_by_dataset.png
+results/plots/          overview.png (everything in one image), wer.png, latency.png, wer_vs_latency.png, cost_per_hour.png, plus wer_by_dataset.png and latency_by_dataset.png
 ```
 
 ## Limitations
