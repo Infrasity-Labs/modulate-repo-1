@@ -1,6 +1,6 @@
-# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI, Whisper and Moonshine
+# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI and Moonshine
 
-A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com), OpenAI Whisper large-v3 through Hugging Face Inference Providers, and the local Moonshine models. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
+A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com) and the local Moonshine models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking. See [Limitations](#limitations).
 
@@ -47,7 +47,7 @@ How latency is measured per engine:
 | Velma Transcribe | `engines/velma.py` | `velma-2-stt-batch-english-vfast` (English Fast) | none | 0.025 | [modulate.ai/api-pricing](https://www.modulate.ai/api-pricing) |
 | Deepgram | `engines/deepgram.py` | `nova-3` | `language=en`, `smart_format=true` | 0.258 ($0.0043 per minute) | [deepgram.com/pricing](https://deepgram.com/pricing) |
 | AssemblyAI | `engines/assemblyai.py` | `universal-3-5-pro` (`speech_models`), reported back as `speech_model_used` | `language_code=en` | 0.21 | [assemblyai.com/pricing](https://www.assemblyai.com/pricing) |
-| Whisper large-v3 via Hugging Face (DeepInfra) | `engines/whisper_hf.py` | `openai/whisper-large-v3`, provider `deepinfra` through Hugging Face Inference Providers | untimed warm-up call; audio read before the timer | 0.027 ($0.00045 per minute) | [deepinfra.com](https://deepinfra.com/openai/whisper-large-v3), passed through by [Hugging Face](https://huggingface.co/docs/inference-providers/pricing) without markup |
+| Whisper large-v3 via Hugging Face (DeepInfra), results not yet included | `engines/whisper_hf.py` | `openai/whisper-large-v3`, provider `deepinfra` through Hugging Face Inference Providers | untimed warm-up call; audio read before the timer | 0.027 ($0.00045 per minute) | [deepinfra.com](https://deepinfra.com/openai/whisper-large-v3), passed through by [Hugging Face](https://huggingface.co/docs/inference-providers/pricing) without markup |
 | Moonshine Tiny (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-tiny` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
 | Moonshine Base (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-base` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
 | Slot A, Slot B | `engines/slot_a.py`, `slot_b.py` | not configured | | | |
