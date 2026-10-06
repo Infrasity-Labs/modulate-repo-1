@@ -175,27 +175,29 @@ Test machine: Apple M1 Pro, 16 GB RAM, macOS 26.3, CPU inference (float32), Pyth
 
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and latencies: `results/<engine>_<dataset>.json`.
 
+Each chart below puts every engine in a single image, using all 60 files. Hatched bars and square markers are engines that run locally on the test machine.
+
 ### Word error rate
 
-![WER](results/plots/wer.png)
+![WER, all engines](results/plots/wer.png)
 
-### Latency (all engines, log scale)
+Per dataset: [`results/plots/wer_by_dataset.png`](results/plots/wer_by_dataset.png)
 
-Hatched bars run locally with no network, so they are not directly comparable with hosted latency. The log scale is used because the hosted and local values differ by about two orders of magnitude.
+### Latency
+
+Local engines have no network and are not directly comparable with hosted ones. The log scale is used because hosted and local values differ by about two orders of magnitude.
 
 ![Latency, all engines](results/plots/latency.png)
 
-### Latency (hosted APIs)
+Per dataset: [`results/plots/latency_by_dataset.png`](results/plots/latency_by_dataset.png)
 
-![Latency, hosted](results/plots/latency_hosted.png)
+### Word error rate against latency
 
-### Latency (local engines, this machine only)
-
-![Local latency](results/plots/latency_local.png)
+![WER against latency](results/plots/wer_vs_latency.png)
 
 ### Cost per audio hour
 
-Hosted engines show the published API rate. The hatched local engines (Moonshine, whisper.cpp) have no API charge and are shown at $0; local compute and electricity are not counted.
+Hosted engines show the published API rate. The local engines (Moonshine, whisper.cpp) have no API charge and are shown at $0; local compute and electricity are not counted.
 
 ![Cost per hour](results/plots/cost_per_hour.png)
 
@@ -249,7 +251,7 @@ scoring/                normalize.py and wer.py, shared by all engines
 tests/                  unit tests on fake text
 datasets/manifests/     files used (audio is git-ignored)
 results/                results.csv, results.md, session.json, per-file JSON
-results/plots/          wer.png, latency.png (all engines), latency_hosted.png, latency_local.png, cost_per_hour.png
+results/plots/          wer.png, latency.png, wer_vs_latency.png, cost_per_hour.png (all engines each), plus wer_by_dataset.png and latency_by_dataset.png
 ```
 
 ## Limitations

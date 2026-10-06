@@ -310,26 +310,108 @@ def plot(summaries):
         fig.savefig(PLOTS / fname, dpi=200, bbox_inches="tight")
         plt.close(fig)
 
-    hosted = [s for s in summaries if not ENGINES[s["engine"]].local]
-    local = [s for s in summaries if ENGINES[s["engine"]].local]
-    render_chart(summaries, "wer_percent", "Word Error Rate (%)", "wer.png",
+    # Per-dataset detail charts (grouped bars, every engine)
+    render_chart(summaries, "wer_percent", "Word Error Rate (%)", "wer_by_dataset.png",
                  "Word Error Rate (WER) by Dataset",
                  "Lower means fewer word errors · all engines, same audio and scoring · hatched bars run locally", unit="%")
-    render_chart(summaries, "mean_latency_s", "Mean Latency (s, log scale)", "latency.png",
-                 "Latency per File: All Engines",
+    render_chart(summaries, "mean_latency_s", "Mean Latency (s, log scale)", "latency_by_dataset.png",
+                 "Latency per File by Dataset",
                  "Lower is faster · log scale · hatched bars run locally with no network and are not directly comparable with hosted latency",
                  unit="s", log=True)
-    render_chart(hosted, "mean_latency_s", "Mean Latency (s)", "latency_hosted.png",
-                 "Latency per File: Hosted APIs",
-                 "Lower is faster · Request duration including network transfer and inference", unit="s")
-    if local:
-        render_chart(local, "mean_latency_s", "Mean Latency (s)", "latency_local.png",
-                     "Latency per File: Local Engines",
-                     "Measured on one local machine, no network (Moonshine on CPU, whisper.cpp on Metal GPU) · not comparable with hosted latency", unit="s")
-    priced = [s for s in summaries if s.get("price_per_hour_usd") is not None]
-    render_chart(priced, "price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
-                 "Pricing Comparison: USD per Audio Hour",
-                 "Lower is cheaper · hosted: published API rates · hatched: run locally, no API charge (local compute not counted)", is_currency=True)
+
+    # Overview charts: one image per metric with every engine in a single chart (overall = all 60 files)
+    overall = [r for r in summaries if r["dataset"] == "overall"]
+    short = {
+        "velma": "Velma\nFast", "deepgram": "Deepgram\nnova-3", "assemblyai": "AssemblyAI\n3.5 Pro",
+        "chirp_3": "Google\nChirp 3", "mai_transcribe_2": "MAI-\nTranscribe 2",
+        "moonshine_tiny": "Moonshine\nTiny", "moonshine_base": "Moonshine\nBase",
+        "whisper_cpp_tiny": "whisper.cpp\ntiny.en", "whisper_cpp_base": "whisper.cpp\nbase.en",
+        "whisper_hf": "Whisper\nlarge-v3 (HF)",
+    }
+
+    def label_of(e):
+        return short.get(e, e) + ("\n(local)" if ENGINES[e].local else "")
+
+    def overview_bar(key, ylabel, fname, title, subtitle, fmt, log=False):
+        rows = sorted([r for r in overall if r.get(key) is not None], key=lambda r: r[key])
+        fig, ax = plt.subplots(figsize=(12, 6), dpi=200)
+        fig.patch.set_facecolor("#FFFFFF")
+        xs = np.arange(len(rows))
+        vals = [r[key] for r in rows]
+        for x_, r in zip(xs, rows):
+            local = ENGINES[r["engine"]].local
+            ax.bar(x_, r[key], 0.55, color="#475569", edgecolor="#FFFFFF" if local else "none",
+                   hatch="///" if local else None, linewidth=0, zorder=3)
+            ax.annotate(fmt(r[key]), (x_, r[key]), xytext=(0, 5), textcoords="offset points",
+                        ha="center", va="bottom", fontsize=10, color="#334155", fontweight="bold")
+        if log:
+            ax.set_yscale("log")
+            ax.set_ylim(min(v for v in vals if v > 0) * 0.6, max(vals) * 3)
+            ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}"))
+        else:
+            ax.set_ylim(0, max(vals) * 1.15 if max(vals) > 0 else 1)
+        ax.set_xticks(xs)
+        ax.set_xticklabels([label_of(r["engine"]) for r in rows], fontsize=8.5, color="#334155")
+        ax.set_ylabel(ylabel, fontsize=10, color="#475569")
+        ax.set_title(title, fontsize=13, fontweight="bold", color="#0F172A", loc="left", pad=24)
+        ax.text(0.0, 1.03, subtitle, transform=ax.transAxes, fontsize=9, color="#64748B", va="bottom")
+        ax.grid(axis="y", linestyle="--", alpha=0.5, color="#E2E8F0", zorder=0)
+        for sp in ["top", "right"]:
+            ax.spines[sp].set_visible(False)
+        fig.tight_layout()
+        fig.savefig(PLOTS / fname, dpi=200, bbox_inches="tight")
+        plt.close(fig)
+
+    note = "All 60 files (LibriSpeech, VoxPopuli, Common Voice slices) · hatched = runs locally"
+    overview_bar("wer_percent", "Word Error Rate (lower is better)", "wer.png",
+                 "Word Error Rate, All Engines", note, lambda v: f"{v:g}%")
+    overview_bar("mean_latency_s", "Mean latency per file, seconds (log scale)", "latency.png",
+                 "Latency per File, All Engines",
+                 note + " · local engines have no network, so they are not directly comparable with hosted ones",
+                 lambda v: f"{v:.2f}s", log=True)
+    overview_bar("price_per_hour_usd", "USD per hour of audio (lower is cheaper)", "cost_per_hour.png",
+                 "Cost per Audio Hour, All Engines",
+                 "Hosted engines: published API rate · local engines: no API charge, shown at $0 (local compute not counted)",
+                 lambda v: "$0" if v == 0 else f"${v:.3f}")
+
+    # WER against latency, every engine on one scatter (faster and more accurate = top right)
+    fig, ax = plt.subplots(figsize=(10, 7), dpi=200)
+    plain = {
+        "velma": "Velma Fast", "deepgram": "Deepgram nova-3", "assemblyai": "AssemblyAI 3.5 Pro",
+        "chirp_3": "Google Chirp 3", "mai_transcribe_2": "MAI-Transcribe 2",
+        "moonshine_tiny": "Moonshine Tiny", "moonshine_base": "Moonshine Base",
+        "whisper_cpp_tiny": "whisper.cpp tiny.en", "whisper_cpp_base": "whisper.cpp base.en",
+        "whisper_hf": "Whisper large-v3 (HF)",
+    }
+    # (dx, dy, horizontal alignment) label offsets in points, chosen so labels do not collide
+    offsets = {
+        "velma": (0, 14, "center"), "deepgram": (-12, 14, "right"), "assemblyai": (14, -4, "left"),
+        "chirp_3": (-12, -22, "right"), "mai_transcribe_2": (0, -22, "center"),
+        "moonshine_tiny": (0, 14, "center"), "moonshine_base": (0, -22, "center"),
+        "whisper_cpp_tiny": (14, -4, "left"), "whisper_cpp_base": (0, -22, "center"),
+    }
+    for r in overall:
+        local = ENGINES[r["engine"]].local
+        ax.scatter(r["wer_percent"], r["mean_latency_s"], s=140, marker="s" if local else "o",
+                   color="#64748B" if local else "#334155", edgecolor="#0F172A", linewidth=1.6, zorder=3)
+        dx, dy, ha = offsets.get(r["engine"], (0, 14, "center"))
+        ax.annotate(plain.get(r["engine"], r["engine"]), (r["wer_percent"], r["mean_latency_s"]),
+                    xytext=(dx, dy), textcoords="offset points", ha=ha, fontsize=8.5,
+                    fontweight="bold", color="#334155")
+    ax.set_yscale("log")
+    ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}s"))
+    ax.invert_xaxis()
+    ax.invert_yaxis()
+    ax.set_xlabel("Word Error Rate (%) · lower is better, axis reversed", fontsize=10, color="#475569")
+    ax.set_ylabel("Mean latency per file (log scale) · faster is up", fontsize=10, color="#475569")
+    ax.set_title("Word Error Rate against Latency, All Engines", fontsize=13, fontweight="bold",
+                 color="#0F172A", loc="left", pad=24)
+    ax.text(0.0, 1.02, "Circles: hosted APIs · squares: run locally, no network (not directly comparable on latency) · "
+            "all 60 files", transform=ax.transAxes, fontsize=9, color="#64748B", va="bottom")
+    ax.grid(True, linestyle="-", alpha=0.35, color="#CBD5E1", zorder=0)
+    fig.tight_layout()
+    fig.savefig(PLOTS / "wer_vs_latency.png", dpi=200, bbox_inches="tight")
+    plt.close(fig)
 
 
 def main():
