@@ -1,0 +1,297 @@
+{
+  "summary": {
+    "engine": "whisper_cpp_base",
+    "model": "ggml-base.en.bin (whisper.cpp)",
+    "dataset": "commonvoice",
+    "files": 20,
+    "files_excluded": 0,
+    "audio_hours": 0.03,
+    "wer_percent": 22.09,
+    "mean_latency_s": 0.09,
+    "median_latency_s": 0.09,
+    "price_per_hour_usd": 0.0,
+    "tested_on": "2026-10-06"
+  },
+  "files": [
+    {
+      "id": "commonvoice_000",
+      "reference": "Joe Keaton disapproved of films, and Buster also had reservations about the medium.",
+      "duration_s": 6.3,
+      "excluded": false,
+      "hypothesis": "Joe Keaton disapproved of films and Buster also had reservations about the media.",
+      "latencies_s": [
+        0.099,
+        0.099,
+        0.099
+      ],
+      "mean_latency_s": 0.099,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_001",
+      "reference": "She'll be all right.",
+      "duration_s": 2.184,
+      "excluded": false,
+      "hypothesis": "Should be alright.",
+      "latencies_s": [
+        0.068,
+        0.068,
+        0.069
+      ],
+      "mean_latency_s": 0.068,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_002",
+      "reference": "Six",
+      "duration_s": 6.576,
+      "excluded": false,
+      "hypothesis": "Six.",
+      "latencies_s": [
+        0.129,
+        0.082,
+        0.076
+      ],
+      "mean_latency_s": 0.096,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_003",
+      "reference": "All's well that ends well.",
+      "duration_s": 4.176,
+      "excluded": false,
+      "hypothesis": "All is well, that ends well.",
+      "latencies_s": [
+        0.081,
+        0.08,
+        0.079
+      ],
+      "mean_latency_s": 0.08,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_004",
+      "reference": "It is a busy market town that serves a large surrounding area.",
+      "duration_s": 6.66,
+      "excluded": false,
+      "hypothesis": "It is a busy market town that serves a large surrounded area.",
+      "latencies_s": [
+        0.095,
+        0.094,
+        0.093
+      ],
+      "mean_latency_s": 0.094,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_005",
+      "reference": "We are going to the football game tonight.",
+      "duration_s": 3.744,
+      "excluded": false,
+      "hypothesis": "We are going to the football game tonight.",
+      "latencies_s": [
+        0.082,
+        0.082,
+        0.082
+      ],
+      "mean_latency_s": 0.082,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_006",
+      "reference": "Elizabeth was about the same age as Maria.",
+      "duration_s": 6.84,
+      "excluded": false,
+      "hypothesis": "I will see you in the next video.",
+      "latencies_s": [
+        0.114,
+        0.117,
+        0.114
+      ],
+      "mean_latency_s": 0.115,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_007",
+      "reference": "Do you mean it?",
+      "duration_s": 5.976,
+      "excluded": false,
+      "hypothesis": "Do you mean it?",
+      "latencies_s": [
+        0.073,
+        0.073,
+        0.073
+      ],
+      "mean_latency_s": 0.073,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_008",
+      "reference": "How is Mozilla going to handle ambiguities like Queue and Cue?",
+      "duration_s": 7.056,
+      "excluded": false,
+      "hypothesis": "How is Mozilla going to handle and be with this? Like cube and cube.",
+      "latencies_s": [
+        0.105,
+        0.106,
+        0.106
+      ],
+      "mean_latency_s": 0.106,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_009",
+      "reference": "You are so rude!",
+      "duration_s": 3.096,
+      "excluded": false,
+      "hypothesis": "You are so rude.",
+      "latencies_s": [
+        0.072,
+        0.072,
+        0.071
+      ],
+      "mean_latency_s": 0.072,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_010",
+      "reference": "I guess you must think I'm kinda Batty.",
+      "duration_s": 3.6,
+      "excluded": false,
+      "hypothesis": "Questions in hand and up to you.",
+      "latencies_s": [
+        0.079,
+        0.08,
+        0.08
+      ],
+      "mean_latency_s": 0.08,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_011",
+      "reference": "No one near the remote machine you could ring?",
+      "duration_s": 4.176,
+      "excluded": false,
+      "hypothesis": "No one near the remote machine you could ring.",
+      "latencies_s": [
+        0.085,
+        0.085,
+        0.086
+      ],
+      "mean_latency_s": 0.085,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_012",
+      "reference": "Groves started writing songs when she was four years old.",
+      "duration_s": 7.032,
+      "excluded": false,
+      "hypothesis": "Grapes spotted writing songs when she was 4 years old.",
+      "latencies_s": [
+        0.09,
+        0.092,
+        0.091
+      ],
+      "mean_latency_s": 0.091,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_013",
+      "reference": "This led to both the Red terror and the White terror.",
+      "duration_s": 4.896,
+      "excluded": false,
+      "hypothesis": "This led to both the red tear and the white tear.",
+      "latencies_s": [
+        0.1,
+        0.095,
+        0.091
+      ],
+      "mean_latency_s": 0.095,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_014",
+      "reference": "The Sacramento valley rail station is just a short walk away.",
+      "duration_s": 7.38,
+      "excluded": false,
+      "hypothesis": "The Sacramento Valley Rail Station is just a short walk away.",
+      "latencies_s": [
+        0.091,
+        0.091,
+        0.093
+      ],
+      "mean_latency_s": 0.092,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_015",
+      "reference": "The most recent Presidents of the United States are Donald Trump, Barack Obama, and George W. Bush.",
+      "duration_s": 8.664,
+      "excluded": false,
+      "hypothesis": "The most recent presidents of the United States are Donald Trump, Barack Obama and George W. Bush.",
+      "latencies_s": [
+        0.117,
+        0.116,
+        0.117
+      ],
+      "mean_latency_s": 0.117,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_016",
+      "reference": "There was nothing to hold him back except himself.",
+      "duration_s": 4.944,
+      "excluded": false,
+      "hypothesis": "There was nothing to hold back, except himself.",
+      "latencies_s": [
+        0.083,
+        0.083,
+        0.083
+      ],
+      "mean_latency_s": 0.083,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_017",
+      "reference": "These locomotives are serviced at Washwood Heath.",
+      "duration_s": 5.976,
+      "excluded": false,
+      "hypothesis": "These locomotives are serviced at Washwood Heath.",
+      "latencies_s": [
+        0.091,
+        0.09,
+        0.09
+      ],
+      "mean_latency_s": 0.09,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_018",
+      "reference": "It might be in this writer's top ten!",
+      "duration_s": 5.328,
+      "excluded": false,
+      "hypothesis": "It might be in this writer's top 10.",
+      "latencies_s": [
+        0.082,
+        0.082,
+        0.082
+      ],
+      "mean_latency_s": 0.082,
+      "empty": false
+    },
+    {
+      "id": "commonvoice_019",
+      "reference": "We spoke often.",
+      "duration_s": 3.552,
+      "excluded": false,
+      "hypothesis": "We spoke of them.",
+      "latencies_s": [
+        0.069,
+        0.07,
+        0.07
+      ],
+      "mean_latency_s": 0.07,
+      "empty": false
+    }
+  ]
+}

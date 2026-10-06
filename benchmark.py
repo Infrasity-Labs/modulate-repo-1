@@ -202,6 +202,8 @@ def plot(summaries):
         "whisper_hf": "Whisper large-v3 (HF/DeepInfra)",
         "moonshine_tiny": "Moonshine Tiny (local)",
         "moonshine_base": "Moonshine Base (local)",
+        "whisper_cpp_tiny": "whisper.cpp tiny.en (local)",
+        "whisper_cpp_base": "whisper.cpp base.en (local)",
     }
     engine_palette = {
         "velma": "#4F46E5",       # Vibrant Indigo
@@ -210,6 +212,8 @@ def plot(summaries):
         "whisper_hf": "#10B981",  # Emerald
         "moonshine_tiny": "#F59E0B",  # Amber
         "moonshine_base": "#8B5CF6",  # Violet
+        "whisper_cpp_tiny": "#EC4899",  # Pink
+        "whisper_cpp_base": "#14B8A6",  # Teal
         "slot_a": "#10B981",      # Emerald
         "slot_b": "#F59E0B",      # Amber
     }

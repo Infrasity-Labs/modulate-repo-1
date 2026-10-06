@@ -23,6 +23,14 @@
     "moonshine_base": {
       "model": "moonshine-ai/moonshine-base",
       "price_per_hour_usd": 0.0
+    },
+    "whisper_cpp_tiny": {
+      "model": "ggml-tiny.en.bin (whisper.cpp)",
+      "price_per_hour_usd": 0.0
+    },
+    "whisper_cpp_base": {
+      "model": "ggml-base.en.bin (whisper.cpp)",
+      "price_per_hour_usd": 0.0
     }
   },
   "excluded": {
@@ -291,6 +299,110 @@
       "median_latency_s": 0.19,
       "price_per_hour_usd": 0.0,
       "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_tiny",
+      "model": "ggml-tiny.en.bin (whisper.cpp)",
+      "dataset": "librispeech",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.0457,
+      "wer_percent": 3.85,
+      "mean_latency_s": 0.09,
+      "median_latency_s": 0.07,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_tiny",
+      "model": "ggml-tiny.en.bin (whisper.cpp)",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 11.0,
+      "mean_latency_s": 0.09,
+      "median_latency_s": 0.1,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_tiny",
+      "model": "ggml-tiny.en.bin (whisper.cpp)",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 25.15,
+      "mean_latency_s": 0.06,
+      "median_latency_s": 0.06,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_tiny",
+      "model": "ggml-tiny.en.bin (whisper.cpp)",
+      "dataset": "overall",
+      "files": 60,
+      "files_excluded": 0,
+      "audio_hours": 0.1267,
+      "wer_percent": 10.22,
+      "mean_latency_s": 0.08,
+      "median_latency_s": 0.06,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_base",
+      "model": "ggml-base.en.bin (whisper.cpp)",
+      "dataset": "librispeech",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.0457,
+      "wer_percent": 3.4,
+      "mean_latency_s": 0.13,
+      "median_latency_s": 0.11,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_base",
+      "model": "ggml-base.en.bin (whisper.cpp)",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 10.17,
+      "mean_latency_s": 0.14,
+      "median_latency_s": 0.14,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_base",
+      "model": "ggml-base.en.bin (whisper.cpp)",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 22.09,
+      "mean_latency_s": 0.09,
+      "median_latency_s": 0.09,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "whisper_cpp_base",
+      "model": "ggml-base.en.bin (whisper.cpp)",
+      "dataset": "overall",
+      "files": 60,
+      "files_excluded": 0,
+      "audio_hours": 0.1267,
+      "wer_percent": 9.21,
+      "mean_latency_s": 0.12,
+      "median_latency_s": 0.1,
+      "price_per_hour_usd": 0.0,
+      "tested_on": "2026-10-06"
     }
   ],
   "additional_runs": [
@@ -301,6 +413,23 @@
       ],
       "started": "2026-10-06T13:25:35",
       "finished": "2026-10-06T13:26:51",
+      "machine": "macOS-26.3-arm64-arm-64bit",
+      "python": "3.11.15",
+      "repeats": 3,
+      "excluded": {
+        "librispeech": [],
+        "voxpopuli": [],
+        "commonvoice": []
+      },
+      "warmup_file": "6930-75918-0013"
+    },
+    {
+      "engines": [
+        "whisper_cpp_tiny",
+        "whisper_cpp_base"
+      ],
+      "started": "2026-10-06T13:52:10",
+      "finished": "2026-10-06T13:52:47",
       "machine": "macOS-26.3-arm64-arm-64bit",
       "python": "3.11.15",
       "repeats": 3,

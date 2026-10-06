@@ -1,6 +1,6 @@
-# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI and Moonshine
+# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI, Moonshine and whisper.cpp
 
-A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com) and the local Moonshine models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
+A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com) and the local Moonshine and whisper.cpp models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking. See [Limitations](#limitations).
 
@@ -36,6 +36,7 @@ A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https:
 
 How latency is measured per engine:
 - **Whisper via Hugging Face:** one routed call. One untimed warm-up call (a 2.9 s LibriSpeech clip) is made before measuring so a cold start is not counted. The audio file is read from disk before the timer starts.
+- **whisper.cpp (local):** wall-clock time of one HTTP request to a local `whisper-server` that has the model loaded. Model loading and one untimed warm-up call are excluded. Each audio file is converted once to 16 kHz mono WAV before the timer starts, because the server reads WAV.
 - **Moonshine (local):** wall-clock time from decoded audio to decoded text on the test machine (feature extraction, generation, token decoding). Model loading and one untimed warm-up call are excluded. No network is involved.
 - **Velma and Deepgram:** one HTTP request. The timer covers sending the file and receiving the transcript.
 - **AssemblyAI:** a three-step flow (upload, submit, poll every 0.25 s). The timer starts before the upload and stops when the status is `completed`, so it covers all three steps and is comparable with the single-call engines. The submit-to-final time is stored in the raw response but is not what the table reports.
@@ -50,6 +51,8 @@ How latency is measured per engine:
 | Whisper large-v3 via Hugging Face (DeepInfra), results not yet included | `engines/whisper_hf.py` | `openai/whisper-large-v3`, provider `deepinfra` through Hugging Face Inference Providers | untimed warm-up call; audio read before the timer | 0.027 ($0.00045 per minute) | [deepinfra.com](https://deepinfra.com/openai/whisper-large-v3), passed through by [Hugging Face](https://huggingface.co/docs/inference-providers/pricing) without markup |
 | Moonshine Tiny (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-tiny` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
 | Moonshine Base (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-base` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
+| whisper.cpp tiny.en (local) | `engines/whisper_cpp_local.py` | `ggml-tiny.en.bin` (75 MiB) | bundled `whisper-server`, defaults, Metal | 0 (no API charge, local compute not counted) | not applicable |
+| whisper.cpp base.en (local) | `engines/whisper_cpp_local.py` | `ggml-base.en.bin` (142 MiB) | bundled `whisper-server`, defaults, Metal | 0 (no API charge, local compute not counted) | not applicable |
 | Slot A, Slot B | `engines/slot_a.py`, `slot_b.py` | not configured | | | |
 
 Each model is the vendor's current recommended or default general-purpose English model as given in its docs on the test date. Prices are the pay-as-you-go pre-recorded (batch) rates read from the vendors' pricing pages on 2026-10-05 and 2026-10-06, and plans differ.
@@ -86,6 +89,12 @@ python benchmark.py --engine whisper_hf --dataset all --num-files 20 --repeats 3
 # 2c. local Moonshine (downloads the model weights from the Hub on first use, no token needed)
 python benchmark.py --engine moonshine_tiny moonshine_base --dataset all --num-files 20 --repeats 3
 
+# 2d. local whisper.cpp (build it once, then point WHISPER_CPP_DIR at the checkout in .env)
+git clone https://github.com/ggml-org/whisper.cpp && cd whisper.cpp
+cmake -B build && cmake --build build -j --config Release
+sh ./models/download-ggml-model.sh tiny.en && sh ./models/download-ggml-model.sh base.en
+cd .. && python benchmark.py --engine whisper_cpp_tiny whisper_cpp_base --dataset all --num-files 20 --repeats 3
+
 # 3. rebuild the tables and plots from results/session.json
 python benchmark.py --report
 
@@ -95,7 +104,7 @@ python -m pytest
 
 | Flag | Meaning |
 |---|---|
-| `--engine` | one or more of `velma`, `deepgram`, `assemblyai`, `whisper_hf`, `moonshine_tiny`, `moonshine_base`, `slot_a`, `slot_b` |
+| `--engine` | one or more of `velma`, `deepgram`, `assemblyai`, `whisper_hf`, `moonshine_tiny`, `moonshine_base`, `whisper_cpp_tiny`, `whisper_cpp_base`, `slot_a`, `slot_b` |
 | `--dataset` | `librispeech`, `voxpopuli`, `commonvoice`, or `all` |
 | `--num-files` | files per dataset from the manifest (default 20) |
 | `--repeats` | calls per file, latency is averaged (default 3) |
@@ -125,20 +134,28 @@ Test run on macOS (Darwin 25.3), Python 3.9 over a consumer internet connection.
 
 ### Local engines
 
-Moonshine runs on the test machine, so its latency measures that machine and has no network time. **Do not compare it with the hosted latency above.** WER can be compared across both tables because the audio files, normalisation and scoring are the same, but the models differ in size and purpose.
+Moonshine and whisper.cpp run on the test machine, so their latency measures that machine and has no network time. **Do not compare it with the hosted latency above.** WER can be compared across both tables because the audio files, normalisation and scoring are the same, but the models differ in size and purpose.
 
-Test machine: Apple M1 Pro, 16 GB RAM, macOS 26.3, CPU inference (float32), Python 3.11, PyTorch 2.14, Transformers 5.18. Run on 2026-10-06 with each call repeated 3 times, 60 files per model, 0 files excluded.
+Test machine: Apple M1 Pro, 16 GB RAM, macOS 26.3, CPU inference (float32), Python 3.11, PyTorch 2.14, Transformers 5.18. Run on 2026-10-06 with each call repeated 3 times, 60 files per model, 0 files excluded. whisper.cpp was built from commit `60c0be6` (2026-10-02) with Metal enabled, so it runs on the GPU, while Moonshine runs on the CPU. whisper.cpp uses the English-only `ggml-tiny.en` and `ggml-base.en` models.
 
 | Dataset | Engine | Model | Files | Excluded | WER % | Mean latency (s) | Median latency (s) | USD per audio hour |
 |---|---|---|---|---|---|---|---|---|
 | librispeech | moonshine_tiny | moonshine-ai/moonshine-tiny | 20 | 0 | 2.49 | 0.17 | 0.13 | 0.0 |
 | librispeech | moonshine_base | moonshine-ai/moonshine-base | 20 | 0 | 1.13 | 0.33 | 0.25 | 0.0 |
+| librispeech | whisper_cpp_tiny | ggml-tiny.en.bin (whisper.cpp) | 20 | 0 | 3.85 | 0.09 | 0.07 | 0.0 |
+| librispeech | whisper_cpp_base | ggml-base.en.bin (whisper.cpp) | 20 | 0 | 3.4 | 0.13 | 0.11 | 0.0 |
 | voxpopuli | moonshine_tiny | moonshine-ai/moonshine-tiny | 20 | 0 | 14.52 | 0.18 | 0.19 | 0.0 |
 | voxpopuli | moonshine_base | moonshine-ai/moonshine-base | 20 | 0 | 11.62 | 0.35 | 0.4 | 0.0 |
+| voxpopuli | whisper_cpp_tiny | ggml-tiny.en.bin (whisper.cpp) | 20 | 0 | 11.0 | 0.09 | 0.1 | 0.0 |
+| voxpopuli | whisper_cpp_base | ggml-base.en.bin (whisper.cpp) | 20 | 0 | 10.17 | 0.14 | 0.14 | 0.0 |
 | commonvoice | moonshine_tiny | moonshine-ai/moonshine-tiny | 20 | 0 | 27.61 | 0.09 | 0.08 | 0.0 |
 | commonvoice | moonshine_base | moonshine-ai/moonshine-base | 20 | 0 | 19.02 | 0.14 | 0.14 | 0.0 |
+| commonvoice | whisper_cpp_tiny | ggml-tiny.en.bin (whisper.cpp) | 20 | 0 | 25.15 | 0.06 | 0.06 | 0.0 |
+| commonvoice | whisper_cpp_base | ggml-base.en.bin (whisper.cpp) | 20 | 0 | 22.09 | 0.09 | 0.09 | 0.0 |
 | overall | moonshine_tiny | moonshine-ai/moonshine-tiny | 60 | 0 | 11.6 | 0.15 | 0.11 | 0.0 |
 | overall | moonshine_base | moonshine-ai/moonshine-base | 60 | 0 | 8.47 | 0.27 | 0.19 | 0.0 |
+| overall | whisper_cpp_tiny | ggml-tiny.en.bin (whisper.cpp) | 60 | 0 | 10.22 | 0.08 | 0.06 | 0.0 |
+| overall | whisper_cpp_base | ggml-base.en.bin (whisper.cpp) | 60 | 0 | 9.21 | 0.12 | 0.1 | 0.0 |
 
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and latencies: `results/<engine>_<dataset>.json`.
 
@@ -166,6 +183,7 @@ Machine-readable: [`results/results.csv`](results/results.csv), [`results/result
 - **Contractions and possessives.** All engines drop the possessive in "country's" and "master's" in one LibriSpeech file, and "all's" against "all is" counts as an error for engines that write the latter.
 - **No empty outputs** except Deepgram on `commonvoice_010`. No wrong-language output after language was pinned.
 - **Moonshine empty outputs.** Moonshine Base returned an empty transcript for two Common Voice files (`commonvoice_002`, the single word "Six", and `commonvoice_007`). Moonshine Tiny returned text for all 60 files. These count as full errors.
+- **whisper.cpp tiny on `commonvoice_010`.** The model returned its `[BLANK_AUDIO]` marker, which the normaliser removes, so the output counts as empty. The other whisper.cpp and Moonshine outputs for this clip are wrong text. The clip is unusable for all engines.
 - **Moonshine Common Voice WER is dominated by short clips.** Common Voice has very short utterances, and a single wrong word in a 3 to 5 word clip is a large share of the 163 reference words.
 - **Common Voice has only 163 reference words.** One word is 0.6 WER points.
 
@@ -200,7 +218,7 @@ Pairs with an empty reference are dropped. An empty hypothesis counts as all del
 ```
 benchmark.py            single CLI entry point (run and report)
 download_datasets.py    downloads slices and writes manifests
-engines/                base.py plus one file per engine (whisper_hf.py hosted, moonshine_local.py local)
+engines/                base.py plus one file per engine (whisper_hf.py hosted; moonshine_local.py and whisper_cpp_local.py local)
 scoring/                normalize.py and wer.py, shared by all engines
 tests/                  unit tests on fake text
 datasets/manifests/     files used (audio is git-ignored)
