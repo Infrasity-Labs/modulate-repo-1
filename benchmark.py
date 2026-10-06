@@ -185,6 +185,7 @@ def plot(summaries):
     import numpy as np
     import matplotlib
     matplotlib.use("Agg")
+    import matplotlib.ticker
     import matplotlib.pyplot as plt
 
     PLOTS.mkdir(parents=True, exist_ok=True)
@@ -224,7 +225,7 @@ def plot(summaries):
         "slot_b": "#F59E0B",      # Amber
     }
 
-    def render_chart(rows, key, ylabel, fname, title, subtitle, unit="", is_currency=False):
+    def render_chart(rows, key, ylabel, fname, title, subtitle, unit="", is_currency=False, log=False):
         engines = list(dict.fromkeys(s["engine"] for s in rows))
         datasets = [d for d in [*ALL_DATASETS, "overall"] if any(s["dataset"] == d for s in rows)]
         fig, ax = plt.subplots(figsize=(9 if len(engines) <= 4 else (11.5 if len(engines) <= 7 else 13.5), 4.8), dpi=200)
@@ -247,13 +248,17 @@ def plot(summaries):
             offset = (i - (n - 1) / 2) * width
             color = engine_palette.get(e, f"C{i}")
             label = engine_display.get(e, e)
-            rects = ax.bar(x + offset, vals, width * 0.88, label=label,
-                           color=color, alpha=0.92, edgecolor="none", zorder=3)
+            is_local = ENGINES[e].local if e in ENGINES else False
+            rects = ax.bar(x + offset, vals, width * 0.88, label=label, color=color, alpha=0.92,
+                           edgecolor="#FFFFFF" if is_local else "none", linewidth=0,
+                           hatch="///" if is_local else None, zorder=3)
 
             for rect, val in zip(rects, vals):
-                if val > 0:
+                if val > 0 or (is_currency and is_local):
                     h = rect.get_height()
-                    if is_currency:
+                    if is_currency and val == 0:
+                        txt = "$0"
+                    elif is_currency:
                         txt = f"${val:.3f}"
                     elif unit == "%":
                         txt = f"{val:g}%"
@@ -277,7 +282,13 @@ def plot(summaries):
         ax.set_xticklabels([dataset_display.get(d, d) for d in datasets], fontsize=9.5, fontweight="600", color="#334155")
         ax.set_ylabel(ylabel, fontsize=9.5, fontweight="600", color="#475569", labelpad=8)
 
-        ax.set_ylim(0, max(max_val * (1.28 if n <= 4 else 1.42), 0.1))
+        if log:
+            pos = [r[key] for r in rows if r.get(key)]
+            ax.set_yscale("log")
+            ax.set_ylim(min(pos) * 0.55, max(pos) * 5)
+            ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}"))
+        else:
+            ax.set_ylim(0, max(max_val * (1.28 if n <= 4 else 1.42), 0.1))
         ax.tick_params(colors="#64748B", which="both", labelsize=8.5)
         ax.grid(axis="y", linestyle="--", alpha=0.5, color="#E2E8F0", zorder=0)
         ax.grid(axis="x", visible=False)
@@ -288,8 +299,12 @@ def plot(summaries):
             ax.spines[spine].set_color("#CBD5E1")
             ax.spines[spine].set_linewidth(1)
 
-        ax.legend(frameon=True, facecolor="#FFFFFF", edgecolor="#E2E8F0",
-                  fontsize=9, loc="upper right", framealpha=0.95)
+        if n > 5:  # keep the legend clear of the bars and their labels
+            ax.legend(frameon=True, facecolor="#FFFFFF", edgecolor="#E2E8F0", fontsize=9,
+                      loc="upper left", bbox_to_anchor=(1.01, 1.0), framealpha=0.95)
+        else:
+            ax.legend(frameon=True, facecolor="#FFFFFF", edgecolor="#E2E8F0",
+                      fontsize=9, loc="upper right", framealpha=0.95)
 
         fig.tight_layout()
         fig.savefig(PLOTS / fname, dpi=200, bbox_inches="tight")
@@ -299,18 +314,22 @@ def plot(summaries):
     local = [s for s in summaries if ENGINES[s["engine"]].local]
     render_chart(summaries, "wer_percent", "Word Error Rate (%)", "wer.png",
                  "Word Error Rate (WER) by Dataset",
-                 "Lower means fewer word errors · hosted and local engines, same audio and scoring", unit="%")
-    render_chart(hosted, "mean_latency_s", "Mean Latency (s)", "latency.png",
+                 "Lower means fewer word errors · all engines, same audio and scoring · hatched bars run locally", unit="%")
+    render_chart(summaries, "mean_latency_s", "Mean Latency (s, log scale)", "latency.png",
+                 "Latency per File: All Engines",
+                 "Lower is faster · log scale · hatched bars run locally with no network and are not directly comparable with hosted latency",
+                 unit="s", log=True)
+    render_chart(hosted, "mean_latency_s", "Mean Latency (s)", "latency_hosted.png",
                  "Latency per File: Hosted APIs",
                  "Lower is faster · Request duration including network transfer and inference", unit="s")
     if local:
         render_chart(local, "mean_latency_s", "Mean Latency (s)", "latency_local.png",
                      "Latency per File: Local Engines",
                      "Measured on one local machine, no network (Moonshine on CPU, whisper.cpp on Metal GPU) · not comparable with hosted latency", unit="s")
-    priced = [s for s in hosted if s.get("price_per_hour_usd") is not None]
+    priced = [s for s in summaries if s.get("price_per_hour_usd") is not None]
     render_chart(priced, "price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
                  "Pricing Comparison: USD per Audio Hour",
-                 "Lower is cheaper · Published vendor pre-recorded (batch) API rates", is_currency=True)
+                 "Lower is cheaper · hosted: published API rates · hatched: run locally, no API charge (local compute not counted)", is_currency=True)
 
 
 def main():
