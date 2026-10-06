@@ -6,9 +6,9 @@
     "files": 20,
     "files_excluded": 0,
     "audio_hours": 0.03,
-    "wer_percent": 9.82,
-    "mean_latency_s": 18.64,
-    "median_latency_s": 20.57,
+    "wer_percent": 9.2,
+    "mean_latency_s": 4.69,
+    "median_latency_s": 3.93,
     "price_per_hour_usd": 0.025,
     "tested_on": "2026-10-06"
   },
@@ -18,13 +18,11 @@
       "reference": "Joe Keaton disapproved of films, and Buster also had reservations about the medium.",
       "duration_s": 6.3,
       "excluded": false,
-      "hypothesis": "jo keaton disapproved of films and buster also had reservations about the medium.",
+      "hypothesis": "Joe Keaton disapproved of films and Buster also had reservations about the medium.",
       "latencies_s": [
-        22.848,
-        11.481,
-        17.647
+        3.852
       ],
-      "mean_latency_s": 17.325,
+      "mean_latency_s": 3.852,
       "empty": false
     },
     {
@@ -34,11 +32,9 @@
       "excluded": false,
       "hypothesis": "she'll be all right.",
       "latencies_s": [
-        23.888,
-        22.428,
-        25.909
+        2.617
       ],
-      "mean_latency_s": 24.075,
+      "mean_latency_s": 2.617,
       "empty": false
     },
     {
@@ -48,11 +44,9 @@
       "excluded": false,
       "hypothesis": "six.",
       "latencies_s": [
-        20.48,
-        12.907,
-        15.402
+        2.776
       ],
-      "mean_latency_s": 16.263,
+      "mean_latency_s": 2.776,
       "empty": false
     },
     {
@@ -62,11 +56,9 @@
       "excluded": false,
       "hypothesis": "all is well that ends well.",
       "latencies_s": [
-        21.487,
-        25.566,
-        24.002
+        4.56
       ],
-      "mean_latency_s": 23.685,
+      "mean_latency_s": 4.56,
       "empty": false
     },
     {
@@ -76,11 +68,9 @@
       "excluded": false,
       "hypothesis": "it is a busy market town that serves a large surrounding area.",
       "latencies_s": [
-        25.627,
-        19.597,
-        27.303
+        10.341
       ],
-      "mean_latency_s": 24.176,
+      "mean_latency_s": 10.341,
       "empty": false
     },
     {
@@ -90,11 +80,9 @@
       "excluded": false,
       "hypothesis": "we are going to the football game tonight.",
       "latencies_s": [
-        27.796,
-        18.502,
-        16.553
+        3.31
       ],
-      "mean_latency_s": 20.95,
+      "mean_latency_s": 3.31,
       "empty": false
     },
     {
@@ -104,11 +92,9 @@
       "excluded": false,
       "hypothesis": "elizabeth was about the same age as maria.",
       "latencies_s": [
-        7.426,
-        12.517,
-        6.412
+        5.508
       ],
-      "mean_latency_s": 8.785,
+      "mean_latency_s": 5.508,
       "empty": false
     },
     {
@@ -118,11 +104,9 @@
       "excluded": false,
       "hypothesis": "do you mean it",
       "latencies_s": [
-        21.071,
-        19.518,
-        15.975
+        2.991
       ],
-      "mean_latency_s": 18.855,
+      "mean_latency_s": 2.991,
       "empty": false
     },
     {
@@ -132,11 +116,9 @@
       "excluded": false,
       "hypothesis": "how is mozilla going to handle ambiguities like q and q",
       "latencies_s": [
-        23.635,
-        23.922,
-        25.944
+        5.01
       ],
-      "mean_latency_s": 24.5,
+      "mean_latency_s": 5.01,
       "empty": false
     },
     {
@@ -144,13 +126,11 @@
       "reference": "You are so rude!",
       "duration_s": 3.096,
       "excluded": false,
-      "hypothesis": "you are so rude.",
+      "hypothesis": "you are so rude!",
       "latencies_s": [
-        16.739,
-        21.417,
-        22.416
+        3.313
       ],
-      "mean_latency_s": 20.191,
+      "mean_latency_s": 3.313,
       "empty": false
     },
     {
@@ -160,11 +140,9 @@
       "excluded": false,
       "hypothesis": "Russians can't handle Bhakti.",
       "latencies_s": [
-        4.035,
-        4.264,
-        6.474
+        3.696
       ],
-      "mean_latency_s": 4.924,
+      "mean_latency_s": 3.696,
       "empty": false
     },
     {
@@ -174,11 +152,9 @@
       "excluded": false,
       "hypothesis": "no one near the remote machine you could ring?",
       "latencies_s": [
-        5.736,
-        4.952,
-        4.231
+        6.46
       ],
-      "mean_latency_s": 4.973,
+      "mean_latency_s": 6.46,
       "empty": false
     },
     {
@@ -188,11 +164,9 @@
       "excluded": false,
       "hypothesis": "graves started writing songs when she was four years old.",
       "latencies_s": [
-        6.261,
-        10.738,
-        28.694
+        3.906
       ],
-      "mean_latency_s": 15.231,
+      "mean_latency_s": 3.906,
       "empty": false
     },
     {
@@ -202,11 +176,9 @@
       "excluded": false,
       "hypothesis": "this led to both the red tear and the white tear.",
       "latencies_s": [
-        27.976,
-        15.958,
-        22.002
+        7.561
       ],
-      "mean_latency_s": 21.979,
+      "mean_latency_s": 7.561,
       "empty": false
     },
     {
@@ -216,11 +188,9 @@
       "excluded": false,
       "hypothesis": "the sacramento valley rail station is just a short walk away.",
       "latencies_s": [
-        23.584,
-        15.641,
-        25.024
+        3.956
       ],
-      "mean_latency_s": 21.416,
+      "mean_latency_s": 3.956,
       "empty": false
     },
     {
@@ -230,11 +200,9 @@
       "excluded": false,
       "hypothesis": "the most recent presidents of the united states are donald trump barack obama and george w bush.",
       "latencies_s": [
-        13.809,
-        11.727,
-        33.161
+        4.191
       ],
-      "mean_latency_s": 19.566,
+      "mean_latency_s": 4.191,
       "empty": false
     },
     {
@@ -244,11 +212,9 @@
       "excluded": false,
       "hypothesis": "there was nothing to hold him back except himself.",
       "latencies_s": [
-        15.021,
-        19.911,
-        19.679
+        7.996
       ],
-      "mean_latency_s": 18.204,
+      "mean_latency_s": 7.996,
       "empty": false
     },
     {
@@ -258,11 +224,9 @@
       "excluded": false,
       "hypothesis": "These locomotives are serviced at Washwood Heath.",
       "latencies_s": [
-        30.595,
-        15.534,
-        24.144
+        3.536
       ],
-      "mean_latency_s": 23.424,
+      "mean_latency_s": 3.536,
       "empty": false
     },
     {
@@ -272,11 +236,9 @@
       "excluded": false,
       "hypothesis": "it might be in this writer's top ten.",
       "latencies_s": [
-        18.06,
-        27.81,
-        20.922
+        5.523
       ],
-      "mean_latency_s": 22.264,
+      "mean_latency_s": 5.523,
       "empty": false
     },
     {
@@ -286,11 +248,9 @@
       "excluded": false,
       "hypothesis": "we spoke often.",
       "latencies_s": [
-        20.571,
-        19.517,
-        25.791
+        2.65
       ],
-      "mean_latency_s": 21.96,
+      "mean_latency_s": 2.65,
       "empty": false
     }
   ]

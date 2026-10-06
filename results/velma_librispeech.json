@@ -6,9 +6,9 @@
     "files": 20,
     "files_excluded": 0,
     "audio_hours": 0.0457,
-    "wer_percent": 0.68,
-    "mean_latency_s": 7.47,
-    "median_latency_s": 6.87,
+    "wer_percent": 0.91,
+    "mean_latency_s": 4.41,
+    "median_latency_s": 3.63,
     "price_per_hour_usd": 0.025,
     "tested_on": "2026-10-06"
   },
@@ -20,11 +20,9 @@
       "excluded": false,
       "hypothesis": "concord returned to its place amidst the tents",
       "latencies_s": [
-        3.606,
-        2.342,
-        2.897
+        2.345
       ],
-      "mean_latency_s": 2.948,
+      "mean_latency_s": 2.345,
       "empty": false
     },
     {
@@ -34,11 +32,9 @@
       "excluded": false,
       "hypothesis": "the english forwarded to the french baskets of flowers of which they had made a plentiful provision to greet the arrival of the young princess the french in return invited the english to a supper which was to be given the next day",
       "latencies_s": [
-        5.23,
-        4.256,
-        9.892
+        8.559
       ],
-      "mean_latency_s": 6.459,
+      "mean_latency_s": 8.559,
       "empty": false
     },
     {
@@ -48,11 +44,9 @@
       "excluded": false,
       "hypothesis": "Congratulations were poured in upon the princess everywhere during her journey.",
       "latencies_s": [
-        12.944,
-        4.097,
-        4.124
+        2.8
       ],
-      "mean_latency_s": 7.055,
+      "mean_latency_s": 2.8,
       "empty": false
     },
     {
@@ -62,11 +56,9 @@
       "excluded": false,
       "hypothesis": "from the respect paid her on all sides she seemed like a queen and from the adoration with which she was treated by two or three she appeared an object of worship the queen mother gave the french the most affectionate reception france was her native country and she had suffered too much unhappiness in england for england to have made her forget france",
       "latencies_s": [
-        9.4,
-        9.881,
-        9.261
+        11.068
       ],
-      "mean_latency_s": 9.514,
+      "mean_latency_s": 11.068,
       "empty": false
     },
     {
@@ -76,11 +68,9 @@
       "excluded": false,
       "hypothesis": "she taught her daughter then by her own affection for it that love for a country where they had both been hospitably received and where a brilliant future opened for them",
       "latencies_s": [
-        4.209,
-        6.294,
-        9.174
+        3.983
       ],
-      "mean_latency_s": 6.559,
+      "mean_latency_s": 3.983,
       "empty": false
     },
     {
@@ -90,11 +80,9 @@
       "excluded": false,
       "hypothesis": "the count had thrown himself back on his seat leaning his shoulders against the partition of the tent and remained thus his face buried in his hands with heaving chest and restless limbs",
       "latencies_s": [
-        10.896,
-        15.639,
-        18.056
+        4.286
       ],
-      "mean_latency_s": 14.864,
+      "mean_latency_s": 4.286,
       "empty": false
     },
     {
@@ -104,11 +92,9 @@
       "excluded": false,
       "hypothesis": "this has indeed been a harassing day continued the young man his eyes fixed upon his friend",
       "latencies_s": [
-        13.997,
-        6.905,
-        15.444
+        3.322
       ],
-      "mean_latency_s": 12.115,
+      "mean_latency_s": 3.322,
       "empty": false
     },
     {
@@ -118,11 +104,9 @@
       "excluded": false,
       "hypothesis": "you will be frank with me i always am",
       "latencies_s": [
-        8.041,
-        3.441,
-        7.293
+        2.964
       ],
-      "mean_latency_s": 6.258,
+      "mean_latency_s": 2.964,
       "empty": false
     },
     {
@@ -132,11 +116,9 @@
       "excluded": false,
       "hypothesis": "can you imagine why buckingham has been so violent i suspect",
       "latencies_s": [
-        7.378,
-        3.232,
-        10.769
+        2.609
       ],
-      "mean_latency_s": 7.126,
+      "mean_latency_s": 2.609,
       "empty": false
     },
     {
@@ -146,11 +128,9 @@
       "excluded": false,
       "hypothesis": "it is you who are mistaken raoul i have read his distress in his eyes in his every gesture and action the whole day",
       "latencies_s": [
-        6.228,
-        5.24,
-        3.95
+        3.166
       ],
-      "mean_latency_s": 5.139,
+      "mean_latency_s": 3.166,
       "empty": false
     },
     {
@@ -160,11 +140,9 @@
       "excluded": false,
       "hypothesis": "i can perceive love clearly enough",
       "latencies_s": [
-        6.435,
-        7.776,
-        4.633
+        2.042
       ],
-      "mean_latency_s": 6.281,
+      "mean_latency_s": 2.042,
       "empty": false
     },
     {
@@ -174,11 +152,9 @@
       "excluded": false,
       "hypothesis": "i am convinced of what i say said the count",
       "latencies_s": [
-        8.726,
-        5.619,
-        5.737
+        4.312
       ],
-      "mean_latency_s": 6.694,
+      "mean_latency_s": 4.312,
       "empty": false
     },
     {
@@ -188,11 +164,9 @@
       "excluded": false,
       "hypothesis": "it is annoyance then",
       "latencies_s": [
-        2.933,
-        2.999,
-        2.93
+        8.116
       ],
-      "mean_latency_s": 2.954,
+      "mean_latency_s": 8.116,
       "empty": false
     },
     {
@@ -202,11 +176,9 @@
       "excluded": false,
       "hypothesis": "in those very terms i even added more",
       "latencies_s": [
-        3.708,
-        5.307,
-        6.267
+        2.428
       ],
-      "mean_latency_s": 5.094,
+      "mean_latency_s": 2.428,
       "empty": false
     },
     {
@@ -216,11 +188,9 @@
       "excluded": false,
       "hypothesis": "but continued raoul not interrupted by this movement of his friend heaven be praised the french who are pronounced to be thoughtless and indiscreet reckless even are capable of bringing a calm and sound judgment to bear on matters of such high importance",
       "latencies_s": [
-        5.865,
-        8.448,
-        17.348
+        8.267
       ],
-      "mean_latency_s": 10.554,
+      "mean_latency_s": 8.267,
       "empty": false
     },
     {
@@ -230,11 +200,9 @@
       "excluded": false,
       "hypothesis": "thus it is that the honour of three is saved our country our masters and our own",
       "latencies_s": [
-        8.902,
-        13.023,
-        7.801
+        2.907
       ],
-      "mean_latency_s": 9.909,
+      "mean_latency_s": 2.907,
       "empty": false
     },
     {
@@ -244,11 +212,9 @@
       "excluded": false,
       "hypothesis": "yes i need repose many things have agitated me to day both in mind and body when you return to morrow i shall no longer be the same man",
       "latencies_s": [
-        8.472,
-        6.258,
-        9.066
+        3.668
       ],
-      "mean_latency_s": 7.932,
+      "mean_latency_s": 3.668,
       "empty": false
     },
     {
@@ -258,11 +224,9 @@
       "excluded": false,
       "hypothesis": "but in this friendly pressure raoul could detect the nervous agitation of a great internal conflict",
       "latencies_s": [
-        8.641,
-        8.448,
-        11.876
+        4.017
       ],
-      "mean_latency_s": 9.655,
+      "mean_latency_s": 4.017,
       "empty": false
     },
     {
@@ -272,11 +236,9 @@
       "excluded": false,
       "hypothesis": "the night was clear starlit and splendid the tempest had passed away and the sweet influences of the evening had restored life peace and security everywhere",
       "latencies_s": [
-        6.225,
-        5.122,
-        4.312
+        3.595
       ],
-      "mean_latency_s": 5.22,
+      "mean_latency_s": 3.595,
       "empty": false
     },
     {
@@ -286,11 +248,9 @@
       "excluded": false,
       "hypothesis": "upon the large square in front of the hotel the shadows of the tents intersected by the golden moonbeams formed as it were a huge mosaic of jet and yellow flagstones",
       "latencies_s": [
-        6.273,
-        9.08,
-        5.778
+        3.735
       ],
-      "mean_latency_s": 7.044,
+      "mean_latency_s": 3.735,
       "empty": false
     }
   ]

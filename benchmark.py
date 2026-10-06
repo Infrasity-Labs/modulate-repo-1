@@ -177,7 +177,7 @@ def plot(summaries):
         fig.tight_layout(); fig.savefig(PLOTS / fname, dpi=150); plt.close(fig)
 
     bars("wer_percent", "WER (%), lower is lower error", "wer.png", "Word error rate")
-    bars("mean_latency_s", "Mean latency per file (s)", "latency.png", "Latency per file (mean of 3 repeats)")
+    bars("mean_latency_s", "Mean latency per file (s)", "latency.png", "Latency per file")
     bars("price_per_hour_usd", "USD per hour of audio", "cost_per_hour.png", "Published price per audio hour")
 
 

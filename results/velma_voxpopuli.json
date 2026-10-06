@@ -7,8 +7,8 @@
     "files_excluded": 0,
     "audio_hours": 0.051,
     "wer_percent": 4.77,
-    "mean_latency_s": 9.71,
-    "median_latency_s": 6.93,
+    "mean_latency_s": 5.41,
+    "median_latency_s": 4.58,
     "price_per_hour_usd": 0.025,
     "tested_on": "2026-10-06"
   },
@@ -20,11 +20,9 @@
       "excluded": false,
       "hypothesis": "imposition of switching off life supporting treatment is nothing else than euthanasia.",
       "latencies_s": [
-        4.179,
-        7.87,
-        4.51
+        3.339
       ],
-      "mean_latency_s": 5.52,
+      "mean_latency_s": 3.339,
       "empty": false
     },
     {
@@ -34,11 +32,9 @@
       "excluded": false,
       "hypothesis": "for beijing china's best known political prisoner and civil rights campaigner is simply a criminal but for chinese civil society and human rights defenders he has been the greatest source of inspiration in their peaceful struggle for democratic reform in communist china.",
       "latencies_s": [
-        12.265,
-        6.26,
-        11.002
+        12.078
       ],
-      "mean_latency_s": 9.842,
+      "mean_latency_s": 12.078,
       "empty": false
     },
     {
@@ -48,11 +44,9 @@
       "excluded": false,
       "hypothesis": "the common travel area however does not allow for free movement of eu nationals.",
       "latencies_s": [
-        5.787,
-        5.611,
-        10.896
+        3.649
       ],
-      "mean_latency_s": 7.431,
+      "mean_latency_s": 3.649,
       "empty": false
     },
     {
@@ -62,11 +56,9 @@
       "excluded": false,
       "hypothesis": "the commission has to take strong action before july.",
       "latencies_s": [
-        5.978,
-        3.882,
-        5.005
+        2.849
       ],
-      "mean_latency_s": 4.955,
+      "mean_latency_s": 2.849,
       "empty": false
     },
     {
@@ -76,11 +68,9 @@
       "excluded": false,
       "hypothesis": "there will be clearer rights for travellers when something goes wrong during the trip and improved termination rights. travellers will be entitled to extended accommodation for at least three days if the return journey cannot be carried out on time because for example of a natural disaster.",
       "latencies_s": [
-        12.306,
-        27.535,
-        11.129
+        5.06
       ],
-      "mean_latency_s": 16.99,
+      "mean_latency_s": 5.06,
       "empty": false
     },
     {
@@ -90,11 +80,9 @@
       "excluded": false,
       "hypothesis": "two thousand and ten finally we would also urge the commission to urge the member states to make greater use of the structural funds within the framework of the european social fund as a way of promoting equality between men and women.",
       "latencies_s": [
-        12.58,
-        12.116,
-        20.39
+        6.054
       ],
-      "mean_latency_s": 15.029,
+      "mean_latency_s": 6.054,
       "empty": false
     },
     {
@@ -104,11 +92,9 @@
       "excluded": false,
       "hypothesis": "We can make progress only if the European project is supported by European citizens in all Member States.",
       "latencies_s": [
-        25.951,
-        18.188,
-        69.778
+        7.119
       ],
-      "mean_latency_s": 37.972,
+      "mean_latency_s": 7.119,
       "empty": false
     },
     {
@@ -118,11 +104,9 @@
       "excluded": false,
       "hypothesis": "it is outrageous to see a government in romania using the police and the secret service to intimidate political opponents restrict civil liberties and falsify elections.",
       "latencies_s": [
-        19.026,
-        5.635,
-        7.474
+        4.412
       ],
-      "mean_latency_s": 10.712,
+      "mean_latency_s": 4.412,
       "empty": false
     },
     {
@@ -132,11 +116,9 @@
       "excluded": false,
       "hypothesis": "so how can we act?",
       "latencies_s": [
-        3.59,
-        6.543,
-        2.561
+        3.962
       ],
-      "mean_latency_s": 4.231,
+      "mean_latency_s": 3.962,
       "empty": false
     },
     {
@@ -146,11 +128,9 @@
       "excluded": false,
       "hypothesis": "i watched in close up a legislative system that permits anonymous bureaucrats to generate so called law without any regard for the damage they do to the british economy and its businesses.",
       "latencies_s": [
-        7.113,
-        4.587,
-        4.714
+        4.65
       ],
-      "mean_latency_s": 5.471,
+      "mean_latency_s": 4.65,
       "empty": false
     },
     {
@@ -160,11 +140,9 @@
       "excluded": false,
       "hypothesis": "we will lose primary forests all around the world in a vain attempt to manage them sustainably",
       "latencies_s": [
-        5.691,
-        4.416,
-        4.635
+        4.907
       ],
-      "mean_latency_s": 4.914,
+      "mean_latency_s": 4.907,
       "empty": false
     },
     {
@@ -174,11 +152,9 @@
       "excluded": false,
       "hypothesis": "we have found that millions of legitimate jobs for our citizens have been lost that billions of taxes are not being paid and are lost how much our governments could appreciate those.",
       "latencies_s": [
-        10.579,
-        9.701,
-        5.098
+        4.501
       ],
-      "mean_latency_s": 8.459,
+      "mean_latency_s": 4.501,
       "empty": false
     },
     {
@@ -188,11 +164,9 @@
       "excluded": false,
       "hypothesis": "if not there will be a big crisis between you and the european parliament.",
       "latencies_s": [
-        5.758,
-        5.823,
-        7.325
+        8.537
       ],
-      "mean_latency_s": 6.302,
+      "mean_latency_s": 8.537,
       "empty": false
     },
     {
@@ -202,11 +176,9 @@
       "excluded": false,
       "hypothesis": "we must also strongly condemn the launch of ballistic missiles by the houthi rebels against the kingdom of saudi arabia and the use of sea mines.",
       "latencies_s": [
-        6.93,
-        5.039,
-        3.75
+        4.076
       ],
-      "mean_latency_s": 5.24,
+      "mean_latency_s": 4.076,
       "empty": false
     },
     {
@@ -216,11 +188,9 @@
       "excluded": false,
       "hypothesis": "but to be honest we have to do more.",
       "latencies_s": [
-        8.392,
-        5.128,
-        5.789
+        3.798
       ],
-      "mean_latency_s": 6.436,
+      "mean_latency_s": 3.798,
       "empty": false
     },
     {
@@ -230,11 +200,9 @@
       "excluded": false,
       "hypothesis": "mr president the march european council confirmed the eu's role as a promoter of the highest nuclear safety standards worldwide.",
       "latencies_s": [
-        6.465,
-        4.397,
-        4.227
+        3.906
       ],
-      "mean_latency_s": 5.03,
+      "mean_latency_s": 3.906,
       "empty": false
     },
     {
@@ -244,11 +212,9 @@
       "excluded": false,
       "hypothesis": "it was a difficult one and it was not clear in the very beginning that we could make it and that we would have a greater europeanisation in this area.",
       "latencies_s": [
-        9.278,
-        9.226,
-        5.616
+        5.563
       ],
-      "mean_latency_s": 8.04,
+      "mean_latency_s": 5.563,
       "empty": false
     },
     {
@@ -258,11 +224,9 @@
       "excluded": false,
       "hypothesis": "we know that they reneged on their commitments.",
       "latencies_s": [
-        2.973,
-        10.34,
-        3.734
+        4.187
       ],
-      "mean_latency_s": 5.682,
+      "mean_latency_s": 4.187,
       "empty": false
     },
     {
@@ -272,11 +236,9 @@
       "excluded": false,
       "hypothesis": "we have to go and ask for solidarity for the sector within the sector because we have seen that no sector player could solve the problem and we have to seek solidarity within europe because bp is a european company",
       "latencies_s": [
-        7.851,
-        8.507,
-        9.189
+        8.734
       ],
-      "mean_latency_s": 8.516,
+      "mean_latency_s": 8.734,
       "empty": false
     },
     {
@@ -286,11 +248,9 @@
       "excluded": false,
       "hypothesis": "while i respect one country two systems i find it shocking that a country run by a communist party appears to be advocating a system which brings representation only to those with wealth and privilege.",
       "latencies_s": [
-        6.853,
-        23.339,
-        22.391
+        6.755
       ],
-      "mean_latency_s": 17.528,
+      "mean_latency_s": 6.755,
       "empty": false
     }
   ]
