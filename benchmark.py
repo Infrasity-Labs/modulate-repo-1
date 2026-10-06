@@ -216,8 +216,8 @@ def plot(summaries):
         "whisper_hf": "#10B981",  # Emerald
         "moonshine_tiny": "#F59E0B",  # Amber
         "moonshine_base": "#8B5CF6",  # Violet
-        "chirp_3": "#EF4444",  # Red
-        "mai_transcribe_2": "#0EA5E9",  # Blue
+        "chirp_3": "#84CC16",  # Lime
+        "mai_transcribe_2": "#0F172A",  # Navy
         "whisper_cpp_tiny": "#EC4899",  # Pink
         "whisper_cpp_base": "#14B8A6",  # Teal
         "slot_a": "#10B981",      # Emerald
@@ -227,7 +227,7 @@ def plot(summaries):
     def render_chart(rows, key, ylabel, fname, title, subtitle, unit="", is_currency=False):
         engines = list(dict.fromkeys(s["engine"] for s in rows))
         datasets = [d for d in [*ALL_DATASETS, "overall"] if any(s["dataset"] == d for s in rows)]
-        fig, ax = plt.subplots(figsize=(9 if len(engines) <= 4 else 11.5, 4.8), dpi=200)
+        fig, ax = plt.subplots(figsize=(9 if len(engines) <= 4 else (11.5 if len(engines) <= 7 else 13.5), 4.8), dpi=200)
         fig.patch.set_facecolor("#FAFAFB")
         ax.set_facecolor("#FFFFFF")
 
@@ -277,7 +277,7 @@ def plot(summaries):
         ax.set_xticklabels([dataset_display.get(d, d) for d in datasets], fontsize=9.5, fontweight="600", color="#334155")
         ax.set_ylabel(ylabel, fontsize=9.5, fontweight="600", color="#475569", labelpad=8)
 
-        ax.set_ylim(0, max(max_val * (1.28 if n <= 5 else 1.4), 0.1))
+        ax.set_ylim(0, max(max_val * (1.28 if n <= 4 else 1.42), 0.1))
         ax.tick_params(colors="#64748B", which="both", labelsize=8.5)
         ax.grid(axis="y", linestyle="--", alpha=0.5, color="#E2E8F0", zorder=0)
         ax.grid(axis="x", visible=False)
