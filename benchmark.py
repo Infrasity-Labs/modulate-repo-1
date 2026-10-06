@@ -20,7 +20,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from engines import ENGINES
-from engines.base import EngineNotConfigured
+from engines.base import EngineNotConfigured, FatalEngineError
 from scoring.normalize import normalize
 from scoring.wer import compute_wer
 
@@ -31,7 +31,7 @@ PLOTS = RESULTS / "plots"
 CACHE = RESULTS / "call_cache.jsonl"  # per-call cache so an interrupted run can resume
 ALL_DATASETS = ["librispeech", "voxpopuli", "commonvoice"]
 PLACEHOLDER_ENGINES = ["slot_a", "slot_b"]
-FIELDS = ["engine", "model", "dataset", "files", "files_excluded", "audio_hours", "wer_percent",
+FIELDS = ["deployment", "engine", "model", "dataset", "files", "files_excluded", "audio_hours", "wer_percent",
           "mean_latency_s", "median_latency_s", "price_per_hour_usd", "tested_on"]
 
 
@@ -64,15 +64,24 @@ def run_session(engine_names, datasets, num_files, repeats, models):
     RESULTS.mkdir(exist_ok=True)
     engines = {n: ENGINES[n](**({"model": models[n]} if n in models else {})) for n in engine_names}
     cache = load_cache()
-    prev = RESULTS / "session.json"  # resumed runs keep the original start time
-    started = json.loads(prev.read_text())["started"] if prev.exists() else None
+    prev = RESULTS / "session.json"
+    prev_engines = {s["engine"] for s in json.loads(prev.read_text())["summaries"]} if prev.exists() else set()
+    # a resumed re-run of the same engines keeps the original start time
+    started = json.loads(prev.read_text())["started"] if prev_engines & set(engine_names) else None
     session = {"started": started or datetime.now().isoformat(timespec="seconds"), "machine": platform.platform(),
                "python": platform.python_version(), "repeats": repeats, "models": {}, "excluded": {}}
     for n, e in engines.items():
         session["models"][n] = {"model": getattr(e, "model", ""), "price_per_hour_usd": e.price_per_hour}
     per = {}  # (engine, dataset) -> rows
+    manifests = {ds: json.loads((DATASETS / "manifests" / f"{ds}.json").read_text())["files"][:num_files]
+                 for ds in datasets}
+    all_files = [f for ds in datasets for f in manifests[ds]]
+    warm = next((f for f in all_files if 2 <= f["duration_s"] <= 3), all_files[0])
+    for n, eng in engines.items():  # untimed, unscored; engines without warmup() do nothing
+        print(f"warm-up {n} on {warm['id']} ({warm['duration_s']}s)", flush=True)
+        eng.warmup(str(DATASETS / warm["file"]))
     for ds in datasets:
-        files = json.loads((DATASETS / "manifests" / f"{ds}.json").read_text())["files"][:num_files]
+        files = manifests[ds]
         recs = {n: {} for n in engines}
         excluded = []
         for i, e in enumerate(files, 1):
@@ -128,7 +137,19 @@ def run_session(engine_names, datasets, num_files, repeats, models):
                 "summary": next(s for s in summaries if s["engine"] == n and s["dataset"] == ds),
                 "files": per[(n, ds)]}, indent=2))
     session["finished"] = datetime.now().isoformat(timespec="seconds")
-    (RESULTS / "session.json").write_text(json.dumps({**session, "summaries": summaries}, indent=2))
+    old = json.loads(prev.read_text()) if prev.exists() else None
+    if old and not any(s["engine"] in engines for s in old["summaries"]):
+        # new engines only: keep the earlier session untouched and add this run beside it
+        old["models"].update(session["models"])
+        old["summaries"] += summaries
+        old.setdefault("additional_runs", []).append({
+            "engines": list(engines), "started": session["started"], "finished": session["finished"],
+            "machine": session["machine"], "python": session["python"], "repeats": repeats,
+            "excluded": session["excluded"], "warmup_file": warm["id"]})
+        out = old
+    else:
+        out = {**session, "summaries": summaries}
+    (RESULTS / "session.json").write_text(json.dumps(out, indent=2))
     return summaries
 
 
@@ -137,17 +158,22 @@ def report():
     order = {n: i for i, n in enumerate(ENGINES)}
     dorder = {d: i for i, d in enumerate([*ALL_DATASETS, "overall"])}
     summaries.sort(key=lambda s: (dorder.get(s["dataset"], 99), order.get(s["engine"], 99)))
+    for s in summaries:
+        s["deployment"] = "local" if ENGINES[s["engine"]].local else "hosted"
     with open(RESULTS / "results.csv", "w", newline="") as f:
         w = csv.DictWriter(f, FIELDS, extrasaction="ignore")
         w.writeheader()
         w.writerows(summaries)
     cell = lambda v: "" if v is None else str(v)
-    lines = ["| Dataset | Engine | Model | Files | Excluded | WER % | Mean latency (s) | Median latency (s) | USD per audio hour |",
-             "|---|---|---|---|---|---|---|---|---|"]
-    for s in summaries:
-        lines.append("| " + " | ".join(cell(s[k]) for k in [
-            "dataset", "engine", "model", "files", "files_excluded", "wer_percent",
-            "mean_latency_s", "median_latency_s", "price_per_hour_usd"]) + " |")
+    head = ["| Dataset | Engine | Model | Files | Excluded | WER % | Mean latency (s) | Median latency (s) | USD per audio hour |",
+            "|---|---|---|---|---|---|---|---|---|"]
+    cols = ["dataset", "engine", "model", "files", "files_excluded", "wer_percent",
+            "mean_latency_s", "median_latency_s", "price_per_hour_usd"]
+    lines = []
+    for title, kind in [("Hosted APIs", "hosted"), ("Local engines (this machine)", "local")]:
+        rows = [s for s in summaries if s["deployment"] == kind]
+        if rows:
+            lines += [f"**{title}**", "", *head] + ["| " + " | ".join(cell(s[k]) for k in cols) + " |" for s in rows] + [""]
     (RESULTS / "results.md").write_text("\n".join(lines) + "\n")
     plot(summaries)
     print("\n".join(lines))
@@ -173,17 +199,25 @@ def plot(summaries):
         "velma": "Velma (Fast)",
         "deepgram": "Deepgram (nova-3)",
         "assemblyai": "AssemblyAI (3.5 Pro)",
+        "whisper_hf": "Whisper large-v3 (HF/DeepInfra)",
+        "moonshine_tiny": "Moonshine Tiny (local)",
+        "moonshine_base": "Moonshine Base (local)",
     }
     engine_palette = {
         "velma": "#4F46E5",       # Vibrant Indigo
         "deepgram": "#0EA5E9",    # Sky Blue
         "assemblyai": "#F43F5E",  # Rose Red
+        "whisper_hf": "#10B981",  # Emerald
+        "moonshine_tiny": "#F59E0B",  # Amber
+        "moonshine_base": "#8B5CF6",  # Violet
         "slot_a": "#10B981",      # Emerald
         "slot_b": "#F59E0B",      # Amber
     }
 
-    def render_chart(key, ylabel, fname, title, subtitle, unit="", is_currency=False):
-        fig, ax = plt.subplots(figsize=(9, 4.8), dpi=200)
+    def render_chart(rows, key, ylabel, fname, title, subtitle, unit="", is_currency=False):
+        engines = list(dict.fromkeys(s["engine"] for s in rows))
+        datasets = [d for d in [*ALL_DATASETS, "overall"] if any(s["dataset"] == d for s in rows)]
+        fig, ax = plt.subplots(figsize=(9 if len(engines) <= 4 else 11.5, 4.8), dpi=200)
         fig.patch.set_facecolor("#FAFAFB")
         ax.set_facecolor("#FFFFFF")
 
@@ -196,7 +230,7 @@ def plot(summaries):
         for i, e in enumerate(engines):
             vals = []
             for d in datasets:
-                s = next((row for row in summaries if row["engine"] == e and row["dataset"] == d), None)
+                s = next((row for row in rows if row["engine"] == e and row["dataset"] == d), None)
                 vals.append(s[key] if s and s.get(key) is not None else 0)
             max_val = max(max_val, max(vals) if vals else 0)
 
@@ -250,13 +284,20 @@ def plot(summaries):
         fig.savefig(PLOTS / fname, dpi=200, bbox_inches="tight")
         plt.close(fig)
 
-    render_chart("wer_percent", "Word Error Rate (%)", "wer.png",
+    hosted = [s for s in summaries if not ENGINES[s["engine"]].local]
+    local = [s for s in summaries if ENGINES[s["engine"]].local]
+    render_chart(summaries, "wer_percent", "Word Error Rate (%)", "wer.png",
                  "Word Error Rate (WER) by Dataset",
-                 "Lower is better · % of word errors across benchmark test slices", unit="%")
-    render_chart("mean_latency_s", "Mean Latency (s)", "latency.png",
-                 "Latency per File Comparison",
+                 "Lower means fewer word errors · hosted and local engines, same audio and scoring", unit="%")
+    render_chart(hosted, "mean_latency_s", "Mean Latency (s)", "latency.png",
+                 "Latency per File: Hosted APIs",
                  "Lower is faster · Request duration including network transfer and inference", unit="s")
-    render_chart("price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
+    if local:
+        render_chart(local, "mean_latency_s", "Mean Latency (s)", "latency_local.png",
+                     "Latency per File: Local Engines",
+                     "Measured on one local machine (CPU), no network · not comparable with hosted latency", unit="s")
+    priced = [s for s in hosted if s.get("price_per_hour_usd") is not None]
+    render_chart(priced, "price_per_hour_usd", "USD per Audio Hour ($)", "cost_per_hour.png",
                  "Pricing Comparison: USD per Audio Hour",
                  "Lower is cheaper · Published vendor pre-recorded (batch) API rates", is_currency=True)
 
@@ -285,6 +326,9 @@ def main():
         run_session(a.engine, datasets, a.num_files, a.repeats, models)
     except EngineNotConfigured as e:
         sys.exit(str(e))
+    except FatalEngineError as e:
+        sys.exit(f"STOPPED: {e}\nCompleted calls are cached in results/call_cache.jsonl. "
+                 "Fix the cause (for example a new token) and rerun the same command to resume.")
     report()
 
 
