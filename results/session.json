@@ -31,6 +31,14 @@
     "whisper_cpp_base": {
       "model": "ggml-base.en.bin (whisper.cpp)",
       "price_per_hour_usd": 0.0
+    },
+    "chirp_3": {
+      "model": "google/chirp-3",
+      "price_per_hour_usd": 0.961
+    },
+    "mai_transcribe_2": {
+      "model": "microsoft/mai-transcribe-2",
+      "price_per_hour_usd": 0.1
     }
   },
   "excluded": {
@@ -403,6 +411,110 @@
       "median_latency_s": 0.1,
       "price_per_hour_usd": 0.0,
       "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "chirp_3",
+      "model": "google/chirp-3",
+      "dataset": "librispeech",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.0457,
+      "wer_percent": 2.04,
+      "mean_latency_s": 5.13,
+      "median_latency_s": 4.58,
+      "price_per_hour_usd": 0.961,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "chirp_3",
+      "model": "google/chirp-3",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 9.13,
+      "mean_latency_s": 5.47,
+      "median_latency_s": 5.04,
+      "price_per_hour_usd": 0.961,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "chirp_3",
+      "model": "google/chirp-3",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 11.04,
+      "mean_latency_s": 4.28,
+      "median_latency_s": 4.37,
+      "price_per_hour_usd": 0.961,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "chirp_3",
+      "model": "google/chirp-3",
+      "dataset": "overall",
+      "files": 60,
+      "files_excluded": 0,
+      "audio_hours": 0.1267,
+      "wer_percent": 6.54,
+      "mean_latency_s": 4.96,
+      "median_latency_s": 4.48,
+      "price_per_hour_usd": 0.961,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "mai_transcribe_2",
+      "model": "microsoft/mai-transcribe-2",
+      "dataset": "librispeech",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.0457,
+      "wer_percent": 0.91,
+      "mean_latency_s": 1.37,
+      "median_latency_s": 1.24,
+      "price_per_hour_usd": 0.1,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "mai_transcribe_2",
+      "model": "microsoft/mai-transcribe-2",
+      "dataset": "voxpopuli",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.051,
+      "wer_percent": 7.88,
+      "mean_latency_s": 1.22,
+      "median_latency_s": 1.2,
+      "price_per_hour_usd": 0.1,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "mai_transcribe_2",
+      "model": "microsoft/mai-transcribe-2",
+      "dataset": "commonvoice",
+      "files": 20,
+      "files_excluded": 0,
+      "audio_hours": 0.03,
+      "wer_percent": 8.59,
+      "mean_latency_s": 1.11,
+      "median_latency_s": 1.1,
+      "price_per_hour_usd": 0.1,
+      "tested_on": "2026-10-06"
+    },
+    {
+      "engine": "mai_transcribe_2",
+      "model": "microsoft/mai-transcribe-2",
+      "dataset": "overall",
+      "files": 60,
+      "files_excluded": 0,
+      "audio_hours": 0.1267,
+      "wer_percent": 5.16,
+      "mean_latency_s": 1.23,
+      "median_latency_s": 1.13,
+      "price_per_hour_usd": 0.1,
+      "tested_on": "2026-10-06"
     }
   ],
   "additional_runs": [
@@ -433,6 +545,23 @@
       "machine": "macOS-26.3-arm64-arm-64bit",
       "python": "3.11.15",
       "repeats": 3,
+      "excluded": {
+        "librispeech": [],
+        "voxpopuli": [],
+        "commonvoice": []
+      },
+      "warmup_file": "6930-75918-0013"
+    },
+    {
+      "engines": [
+        "chirp_3",
+        "mai_transcribe_2"
+      ],
+      "started": "2026-10-06T14:07:55",
+      "finished": "2026-10-06T14:47:34",
+      "machine": "macOS-26.3-arm64-arm-64bit",
+      "python": "3.11.15",
+      "repeats": 2,
       "excluded": {
         "librispeech": [],
         "voxpopuli": [],

@@ -1,0 +1,277 @@
+{
+  "summary": {
+    "engine": "chirp_3",
+    "model": "google/chirp-3",
+    "dataset": "voxpopuli",
+    "files": 20,
+    "files_excluded": 0,
+    "audio_hours": 0.051,
+    "wer_percent": 9.13,
+    "mean_latency_s": 5.47,
+    "median_latency_s": 5.04,
+    "price_per_hour_usd": 0.961,
+    "tested_on": "2026-10-06"
+  },
+  "files": [
+    {
+      "id": "voxpopuli_000",
+      "reference": "imposition of switching off the life supporting treatment is nothing else than euthanasia.",
+      "duration_s": 6.12,
+      "excluded": false,
+      "hypothesis": "Imposition of switching of the life-supporting treatment is nothing else than euthanasia.",
+      "latencies_s": [
+        4.5,
+        4.215
+      ],
+      "mean_latency_s": 4.357,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_001",
+      "reference": "for beijing china's best known political prisoner and civil rights campaigner is simply a criminal but for chinese civil society and human rights defenders he has been the greatest source of inspiration in their peaceful struggle for democratic reform in communist china.",
+      "duration_s": 19.38,
+      "excluded": false,
+      "hypothesis": "For Beijing, China's best known political prisoner and civil rights campaigner is simply a criminal. But for Chinese civil society and human rights defenders, he has been the greatest source of inspiration in their peaceful struggle for democratic reform in communist China.",
+      "latencies_s": [
+        8.436,
+        9.176
+      ],
+      "mean_latency_s": 8.806,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_002",
+      "reference": "the common travel area however does not allow for the free movement of eu nationals.",
+      "duration_s": 5.06,
+      "excluded": false,
+      "hypothesis": "The common travel area, however, does not allow for free movement of EU nationals.",
+      "latencies_s": [
+        3.938,
+        4.2
+      ],
+      "mean_latency_s": 4.069,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_003",
+      "reference": "the commission has to take strong action before july.",
+      "duration_s": 4.56,
+      "excluded": false,
+      "hypothesis": "The commission has to take strong action before July.",
+      "latencies_s": [
+        3.823,
+        4.056
+      ],
+      "mean_latency_s": 3.939,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_004",
+      "reference": "there will be clearer rights for travellers when something goes wrong during the trip and improved termination rights. travellers will be entitled to extended accommodation for at least three days if the return journey cannot be carried out on time because for example a natural disaster.",
+      "duration_s": 21.18,
+      "excluded": false,
+      "hypothesis": "There will be a clearer rights for travellers when something goes wrong during the trip and improved to ministration rights. Travellers will be entitled to extended accommodation for at least 3 days if the return journey cannot be carried out on time because, for example, of a natural disaster.",
+      "latencies_s": [
+        9.358,
+        7.99
+      ],
+      "mean_latency_s": 8.674,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_005",
+      "reference": "two thousand and ten finally we would also urge the commission to urge the member states to make greater use of the structural funds within the framework of the european social fund as a way of promoting equality between men and women.",
+      "duration_s": 15.978,
+      "excluded": false,
+      "hypothesis": "2010. Finally, we would also urge the Commission towards the member states to make a greater use of the structural funds within the framework of the European Social Fund as a way of promoting equality between men and women.",
+      "latencies_s": [
+        7.931,
+        7.431
+      ],
+      "mean_latency_s": 7.681,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_006",
+      "reference": "we can make progress only if the european project is supported by european citizens in all member states.",
+      "duration_s": 5.979,
+      "excluded": false,
+      "hypothesis": "We can do progress only if European project is supported by European citizens in all member states.",
+      "latencies_s": [
+        4.303,
+        4.511
+      ],
+      "mean_latency_s": 4.407,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_007",
+      "reference": "it is outrageous to see a government in romania using the police and the secret service to intimidate political opponents restrict civil liberties and falsify elections.",
+      "duration_s": 11.18,
+      "excluded": false,
+      "hypothesis": "It is outrageous to see a government in Romania using the police and the secret service to intimidate political opponents, restrict civil liberties and falsify elections.",
+      "latencies_s": [
+        5.813,
+        5.965
+      ],
+      "mean_latency_s": 5.889,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_008",
+      "reference": "so how can we act?",
+      "duration_s": 1.06,
+      "excluded": false,
+      "hypothesis": "So, how can we act?",
+      "latencies_s": [
+        2.881,
+        3.238
+      ],
+      "mean_latency_s": 3.059,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_009",
+      "reference": "i watched in close up a legislative system that permits anonymous bureaucrats to generate so called law without any regard for the damage they do to the british economy and its businesses.",
+      "duration_s": 13.52,
+      "excluded": false,
+      "hypothesis": "I watched in close up a legislative system that permits anonymous bureaucrats to generate so-called law without any regard for the damage they do to the British economy and its businesses.",
+      "latencies_s": [
+        6.617,
+        6.726
+      ],
+      "mean_latency_s": 6.671,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_010",
+      "reference": "we will lose primary forests all around the world in a vain attempt to manage them sustainably.",
+      "duration_s": 5.699,
+      "excluded": false,
+      "hypothesis": "We will lose primary forest all around the world in a vain attempt to manage them sustainably.",
+      "latencies_s": [
+        3.31,
+        4.338
+      ],
+      "mean_latency_s": 3.824,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_011",
+      "reference": "we found that millions of legitimate jobs for our citizens have been lost that billions in taxes are not being paid and are lost how much our governments would appreciate those!",
+      "duration_s": 12.519,
+      "excluded": false,
+      "hypothesis": "We found that millions of legitimate jobs for our citizens have been lost, that billions of taxes are not being paid and are lost. How much our governments could appreciate those?",
+      "latencies_s": [
+        6.604,
+        7.922
+      ],
+      "mean_latency_s": 7.263,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_012",
+      "reference": "if not there will be a big crisis between you and the european parliament.",
+      "duration_s": 5.44,
+      "excluded": false,
+      "hypothesis": "not, there will be a big crisis between you and the European Parliament.",
+      "latencies_s": [
+        4.152,
+        4.035
+      ],
+      "mean_latency_s": 4.094,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_013",
+      "reference": "we must also strongly condemn the launch of ballistic missiles by the houthi rebels against the kingdom of saudi arabia and the use of sea mines.",
+      "duration_s": 8.28,
+      "excluded": false,
+      "hypothesis": "We must also strongly condemn the launch of ballistic missile by the Houthi rebels against the Kingdom of Saudi Arabia and the use of sea mines.",
+      "latencies_s": [
+        5.101,
+        4.973
+      ],
+      "mean_latency_s": 5.037,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_014",
+      "reference": "but to be honest we have to do more.",
+      "duration_s": 2.4,
+      "excluded": false,
+      "hypothesis": "But to be honest, we have to do more.",
+      "latencies_s": [
+        3.162,
+        3.355
+      ],
+      "mean_latency_s": 3.258,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_015",
+      "reference": "mr president the march european council confirmed the eu's role as a promoter of the highest nuclear safety standards worldwide and in the eu neighbourhood.",
+      "duration_s": 9.94,
+      "excluded": false,
+      "hypothesis": "Thank you, Mr. President. March European Council confirmed the EU role as a promoter of the highest nuclear safety standards worldwide.",
+      "latencies_s": [
+        8.341,
+        5.485
+      ],
+      "mean_latency_s": 6.913,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_016",
+      "reference": "it was difficult and it was not clear at the very beginning that we would make it and that we would have greater europeanisation in this area.",
+      "duration_s": 7.8,
+      "excluded": false,
+      "hypothesis": "It's a difficult one. It was not clear in the very beginning that we could make it and that we would have an a greater Europeanization in this area in this",
+      "latencies_s": [
+        4.907,
+        5.179
+      ],
+      "mean_latency_s": 5.043,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_017",
+      "reference": "we know that they renege on their commitments.",
+      "duration_s": 2.58,
+      "excluded": false,
+      "hypothesis": "We know that they renege on their commitments.",
+      "latencies_s": [
+        3.356,
+        3.185
+      ],
+      "mean_latency_s": 3.271,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_018",
+      "reference": "we have to go and ask for solidarity for the sector within the sector because we have seen that none of the sector's players could solve the problem and we have to seek solidarity within europe because bp is a european company;",
+      "duration_s": 13.119,
+      "excluded": false,
+      "hypothesis": "We have to go and ask for the solidarity for the sector within the sector because we have seen that no sector player could solve the problem and we have to seek for solidarity within Europe because BP is a European company.",
+      "latencies_s": [
+        6.444,
+        7.0
+      ],
+      "mean_latency_s": 6.722,
+      "empty": false
+    },
+    {
+      "id": "voxpopuli_019",
+      "reference": "while i respect one country two systems' i find it shocking that a country run by a communist party appears to be advocating a system which gives representation only to those with wealth and privilege.",
+      "duration_s": 11.66,
+      "excluded": false,
+      "hypothesis": "President, while I respect one country two systems, I find it shocking that a country run by a communist party appears to be advocating a system which brings representation only to those with wealth and privilege.",
+      "latencies_s": [
+        6.314,
+        6.466
+      ],
+      "mean_latency_s": 6.39,
+      "empty": false
+    }
+  ]
+}

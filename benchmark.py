@@ -52,6 +52,8 @@ def call(engine, name, dataset, entry, repeat, cache):
     try:
         t = engine.transcribe(str(DATASETS / entry["file"]))
         rec.update(text=t.text, latency_s=round(t.latency_s, 3), error=None)
+        if t.cost_usd is not None:
+            rec["cost_usd"] = t.cost_usd
     except RuntimeError as err:
         rec.update(text=None, latency_s=None, error=str(err)[:300])
     with open(CACHE, "a") as f:
@@ -202,6 +204,8 @@ def plot(summaries):
         "whisper_hf": "Whisper large-v3 (HF/DeepInfra)",
         "moonshine_tiny": "Moonshine Tiny (local)",
         "moonshine_base": "Moonshine Base (local)",
+        "chirp_3": "Google Chirp 3 (OpenRouter)",
+        "mai_transcribe_2": "MAI-Transcribe 2 (OpenRouter)",
         "whisper_cpp_tiny": "whisper.cpp tiny.en (local)",
         "whisper_cpp_base": "whisper.cpp base.en (local)",
     }
@@ -212,6 +216,8 @@ def plot(summaries):
         "whisper_hf": "#10B981",  # Emerald
         "moonshine_tiny": "#F59E0B",  # Amber
         "moonshine_base": "#8B5CF6",  # Violet
+        "chirp_3": "#EF4444",  # Red
+        "mai_transcribe_2": "#0EA5E9",  # Blue
         "whisper_cpp_tiny": "#EC4899",  # Pink
         "whisper_cpp_base": "#14B8A6",  # Teal
         "slot_a": "#10B981",      # Emerald

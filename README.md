@@ -1,6 +1,6 @@
-# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI, Moonshine and whisper.cpp
+# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI, Chirp 3, MAI-Transcribe 2, Moonshine and whisper.cpp
 
-A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com) and the local Moonshine and whisper.cpp models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
+A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com), Google Chirp 3 and Microsoft MAI-Transcribe 2 (both through [OpenRouter](https://openrouter.ai)), and the local Moonshine and whisper.cpp models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking. See [Limitations](#limitations).
 
@@ -38,6 +38,7 @@ How latency is measured per engine:
 - **Whisper via Hugging Face:** one routed call. One untimed warm-up call (a 2.9 s LibriSpeech clip) is made before measuring so a cold start is not counted. The audio file is read from disk before the timer starts.
 - **whisper.cpp (local):** wall-clock time of one HTTP request to a local `whisper-server` that has the model loaded. Model loading and one untimed warm-up call are excluded. Each audio file is converted once to 16 kHz mono WAV before the timer starts, because the server reads WAV.
 - **Moonshine (local):** wall-clock time from decoded audio to decoded text on the test machine (feature extraction, generation, token decoding). Model loading and one untimed warm-up call are excluded. No network is involved.
+- **Chirp 3 and MAI-Transcribe 2 via OpenRouter:** one HTTP request carrying the base64 audio. The WAV conversion and base64 encoding happen before the timer starts. Each file is called 2 times and the 2 values are averaged (Velma, Deepgram and AssemblyAI use 3 repeats), which keeps the cost of the two models within budget.
 - **Velma and Deepgram:** one HTTP request. The timer covers sending the file and receiving the transcript.
 - **AssemblyAI:** a three-step flow (upload, submit, poll every 0.25 s). The timer starts before the upload and stops when the status is `completed`, so it covers all three steps and is comparable with the single-call engines. The submit-to-final time is stored in the raw response but is not what the table reports.
 
@@ -49,6 +50,8 @@ How latency is measured per engine:
 | Deepgram | `engines/deepgram.py` | `nova-3` | `language=en`, `smart_format=true` | 0.258 ($0.0043 per minute) | [deepgram.com/pricing](https://deepgram.com/pricing) |
 | AssemblyAI | `engines/assemblyai.py` | `universal-3-5-pro` (`speech_models`), reported back as `speech_model_used` | `language_code=en` | 0.21 | [assemblyai.com/pricing](https://www.assemblyai.com/pricing) |
 | Whisper large-v3 via Hugging Face (DeepInfra), results not yet included | `engines/whisper_hf.py` | `openai/whisper-large-v3`, provider `deepinfra` through Hugging Face Inference Providers | untimed warm-up call; audio read before the timer | 0.027 ($0.00045 per minute) | [deepinfra.com](https://deepinfra.com/openai/whisper-large-v3), passed through by [Hugging Face](https://huggingface.co/docs/inference-providers/pricing) without markup |
+| Google Chirp 3 (via OpenRouter) | `engines/openrouter_stt.py` | `google/chirp-3` | `language=en` | 0.961 ($0.000267 per second) | [openrouter.ai/google/chirp-3](https://openrouter.ai/google/chirp-3) |
+| Microsoft MAI-Transcribe 2 (via OpenRouter) | `engines/openrouter_stt.py` | `microsoft/mai-transcribe-2` | `language=en` | 0.10 | [openrouter.ai/microsoft/mai-transcribe-2](https://openrouter.ai/microsoft/mai-transcribe-2) |
 | Moonshine Tiny (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-tiny` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
 | Moonshine Base (local) | `engines/moonshine_local.py` | `moonshine-ai/moonshine-base` (MIT) | Transformers, CPU, float32 | 0 (no API charge, local compute not counted) | not applicable |
 | whisper.cpp tiny.en (local) | `engines/whisper_cpp_local.py` | `ggml-tiny.en.bin` (75 MiB) | bundled `whisper-server`, defaults, Metal | 0 (no API charge, local compute not counted) | not applicable |
@@ -61,6 +64,8 @@ API references: [Velma](https://docs.modulate.ai/api-reference/stt/batch-english
 
 Whisper large-v3 is served through Hugging Face Inference Providers. Groq is not a provider for this model on Hugging Face. DeepInfra is, and it publishes a per-minute price, so it is the provider used. Whisper latency depends on the provider as well as the model, because the call goes through the Hugging Face router to DeepInfra. DeepInfra's page mentions a minimum charge per request without stating the amount, so cost for very short clips may be slightly higher than the per-minute rate.
 
+Chirp 3 and MAI-Transcribe 2 are called through OpenRouter's `POST /api/v1/audio/transcriptions` endpoint, which takes base64 WAV audio, so each file is converted once to 16 kHz mono WAV before timing. Their latency therefore depends on OpenRouter and the upstream provider as well as the model. The optional `language` parameter is pinned to `en`: with automatic detection, Chirp 3 returned French for an unintelligible English clip. Both models bill each request rounded up to the next whole second, so the billed audio for the 60 files is 488 s per pass instead of 456 s. Measured spend through OpenRouter for these two models, tests included, was about $0.29 (Chirp 3) and $0.03 (MAI-Transcribe 2); the engine keeps a spend ledger and stops before a configured cap.
+
 Moonshine models run locally on the test machine, so they are listed in a separate table and their latency is not comparable with hosted APIs (see [Results](#results)). The models differ in size and purpose: Moonshine is a small on-device model family (the checkpoints are 110 MB and 248 MB), while the hosted engines are server-side services.
 
 Language is set to English for Deepgram and AssemblyAI. In an early test AssemblyAI with automatic language detection returned Slovenian text for English VoxPopuli audio, so the language is pinned for fairness with the English-only Velma model.
@@ -71,7 +76,7 @@ Language is set to English for Deepgram and AssemblyAI. In an early test Assembl
 git clone https://github.com/Infrasity-Labs/modulate-repo-1 && cd modulate-repo-1
 python3.11 -m venv .venv && source .venv/bin/activate   # Python 3.10 or newer
 pip install -r requirements.txt
-cp .env.example .env     # set VELMA_API_KEY, DEEPGRAM_API_KEY, ASSEMBLYAI_API_KEY, HF_TOKEN
+cp .env.example .env     # set VELMA_API_KEY, DEEPGRAM_API_KEY, ASSEMBLYAI_API_KEY, HF_TOKEN, OPENROUTER_API_KEY
 ```
 
 Keys are read from the environment only. `.env` is git-ignored. Never commit keys.
@@ -82,6 +87,9 @@ python download_datasets.py --dataset all --num-files 20
 
 # 2. run all engines in one session, 3 repeats per file
 python benchmark.py --engine velma deepgram assemblyai --dataset all --num-files 20 --repeats 3
+
+# 2a. Chirp 3 and MAI-Transcribe 2 via OpenRouter (billed per request, rounded up to whole seconds)
+python benchmark.py --engine chirp_3 mai_transcribe_2 --dataset all --num-files 20 --repeats 2
 
 # 2b. hosted Whisper large-v3 (needs HF_TOKEN with Inference Providers permission and credits)
 python benchmark.py --engine whisper_hf --dataset all --num-files 20 --repeats 3
@@ -104,14 +112,14 @@ python -m pytest
 
 | Flag | Meaning |
 |---|---|
-| `--engine` | one or more of `velma`, `deepgram`, `assemblyai`, `whisper_hf`, `moonshine_tiny`, `moonshine_base`, `whisper_cpp_tiny`, `whisper_cpp_base`, `slot_a`, `slot_b` |
+| `--engine` | one or more of `velma`, `deepgram`, `assemblyai`, `chirp_3`, `mai_transcribe_2`, `whisper_hf`, `moonshine_tiny`, `moonshine_base`, `whisper_cpp_tiny`, `whisper_cpp_base`, `slot_a`, `slot_b` |
 | `--dataset` | `librispeech`, `voxpopuli`, `commonvoice`, or `all` |
 | `--num-files` | files per dataset from the manifest (default 20) |
 | `--repeats` | calls per file, latency is averaged (default 3) |
 | `--model ENGINE=MODEL` | override a model, for example `velma=multilingual` |
 | `--report` | regenerate `results/results.csv`, `results/results.md` and `results/plots/` |
 
-How a session works: engines are called one after another for each file, so all engines see similar network conditions. Every call is cached in `results/call_cache.jsonl` (git-ignored), so an interrupted run resumes where it stopped. If any engine fails on a file after retries, the file is excluded for every engine and the count is shown in the results. If Hugging Face returns 401, 402 or 403 (bad token, missing permission or credits exhausted) the run stops, keeps the cached calls, and resumes when you rerun the same command. Running new engines adds them to `results/session.json` without changing the engines already recorded. To start a fresh run of an engine that is already recorded, delete `results/call_cache.jsonl` and `results/session.json`. Close other applications during a local (Moonshine) run, since its latency depends on machine load.
+How a session works: engines are called one after another for each file, so all engines see similar network conditions. Every call is cached in `results/call_cache.jsonl` (git-ignored), so an interrupted run resumes where it stopped. If any engine fails on a file after retries, the file is excluded for every engine and the count is shown in the results. If Hugging Face returns 401, 402 or 403 (bad token, missing permission or credits exhausted). The OpenRouter engines also stop before spending past their budget cap (`budget_usd` in `engines/openrouter_stt.py`) the run stops, keeps the cached calls, and resumes when you rerun the same command. Running new engines adds them to `results/session.json` without changing the engines already recorded. To start a fresh run of an engine that is already recorded, delete `results/call_cache.jsonl` and `results/session.json`. Close other applications during a local (Moonshine) run, since its latency depends on machine load.
 
 ## Results
 
@@ -122,15 +130,23 @@ Test run on macOS (Darwin 25.3), Python 3.9 over a consumer internet connection.
 | librispeech | velma | english-fast | 20 | 0 | 0.91 | 4.41 | 3.63 | 0.025 |
 | librispeech | deepgram | nova-3 | 20 | 0 | 2.72 | 3.79 | 2.78 | 0.258 |
 | librispeech | assemblyai | universal-3-5-pro | 20 | 0 | 1.81 | 8.34 | 6.68 | 0.21 |
+| librispeech | chirp_3 | google/chirp-3 | 20 | 0 | 2.04 | 5.13 | 4.58 | 0.961 |
+| librispeech | mai_transcribe_2 | microsoft/mai-transcribe-2 | 20 | 0 | 0.91 | 1.37 | 1.24 | 0.1 |
 | voxpopuli | velma | english-fast | 20 | 0 | 4.77 | 5.41 | 4.58 | 0.025 |
 | voxpopuli | deepgram | nova-3 | 20 | 0 | 8.3 | 5.85 | 3.91 | 0.258 |
 | voxpopuli | assemblyai | universal-3-5-pro | 20 | 0 | 8.3 | 9.53 | 7.02 | 0.21 |
+| voxpopuli | chirp_3 | google/chirp-3 | 20 | 0 | 9.13 | 5.47 | 5.04 | 0.961 |
+| voxpopuli | mai_transcribe_2 | microsoft/mai-transcribe-2 | 20 | 0 | 7.88 | 1.22 | 1.2 | 0.1 |
 | commonvoice | velma | english-fast | 20 | 0 | 9.2 | 4.69 | 3.93 | 0.025 |
 | commonvoice | deepgram | nova-3 | 20 | 0 | 12.27 | 4.5 | 4.52 | 0.258 |
 | commonvoice | assemblyai | universal-3-5-pro | 20 | 0 | 8.59 | 7.6 | 7.59 | 0.21 |
+| commonvoice | chirp_3 | google/chirp-3 | 20 | 0 | 11.04 | 4.28 | 4.37 | 0.961 |
+| commonvoice | mai_transcribe_2 | microsoft/mai-transcribe-2 | 20 | 0 | 8.59 | 1.11 | 1.1 | 0.1 |
 | overall | velma | english-fast | 60 | 0 | 3.87 | 4.83 | 4.0 | 0.025 |
 | overall | deepgram | nova-3 | 60 | 0 | 6.63 | 4.71 | 3.72 | 0.258 |
 | overall | assemblyai | universal-3-5-pro | 60 | 0 | 5.71 | 8.49 | 7.04 | 0.21 |
+| overall | chirp_3 | google/chirp-3 | 60 | 0 | 6.54 | 4.96 | 4.48 | 0.961 |
+| overall | mai_transcribe_2 | microsoft/mai-transcribe-2 | 60 | 0 | 5.16 | 1.23 | 1.13 | 0.1 |
 
 ### Local engines
 
@@ -178,6 +194,7 @@ Machine-readable: [`results/results.csv`](results/results.csv), [`results/result
 ### Notes on the numbers
 
 - **One Common Voice clip is unusable.** For `commonvoice_010` (reference "I guess you must think I'm kinda Batty.") all three engines fail differently: Velma returned "Russians can't handle Bhakti.", Deepgram returned an empty transcript, and AssemblyAI returned "question was written on the paper". This points to a problem with the clip or its reference, not with one engine. It is kept in the tables because exclusion is only applied to engine failures. Without it, Common Voice WER is 5.16 for Velma, 7.74 for Deepgram and 3.87 for AssemblyAI, and overall WER is 3.15, 5.94 and 5.01.
+- **Chirp 3 and MAI-Transcribe 2 on `commonvoice_010`.** Both also fail on this clip (with the language pinned to English they return unrelated English text), so all engines fail on it.
 - **Latency varies with network conditions.** Latency includes upload from the test machine and depends on network conditions and server load at the time.
 - **Part of the WER is reference style, not recognition.** LibriSpeech references contain "to day" and "to morrow", while Deepgram and AssemblyAI write "today" and "tomorrow". AssemblyAI wrote "2010" for the spoken "two thousand and ten", which the number rule renders without "and". Neither engine is wrong about the audio.
 - **Contractions and possessives.** All engines drop the possessive in "country's" and "master's" in one LibriSpeech file, and "all's" against "all is" counts as an error for engines that write the latter.
@@ -218,7 +235,7 @@ Pairs with an empty reference are dropped. An empty hypothesis counts as all del
 ```
 benchmark.py            single CLI entry point (run and report)
 download_datasets.py    downloads slices and writes manifests
-engines/                base.py plus one file per engine (whisper_hf.py hosted; moonshine_local.py and whisper_cpp_local.py local)
+engines/                base.py plus one file per engine (openrouter_stt.py and whisper_hf.py hosted; moonshine_local.py and whisper_cpp_local.py local)
 scoring/                normalize.py and wer.py, shared by all engines
 tests/                  unit tests on fake text
 datasets/manifests/     files used (audio is git-ignored)

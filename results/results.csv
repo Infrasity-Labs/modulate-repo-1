@@ -4,6 +4,8 @@ hosted,deepgram,nova-3,librispeech,20,0,0.0457,2.72,3.79,2.78,0.258,2026-10-06
 hosted,assemblyai,universal-3-5-pro,librispeech,20,0,0.0457,1.81,8.34,6.68,0.21,2026-10-06
 local,moonshine_tiny,moonshine-ai/moonshine-tiny,librispeech,20,0,0.0457,2.49,0.17,0.13,0.0,2026-10-06
 local,moonshine_base,moonshine-ai/moonshine-base,librispeech,20,0,0.0457,1.13,0.33,0.25,0.0,2026-10-06
+hosted,chirp_3,google/chirp-3,librispeech,20,0,0.0457,2.04,5.13,4.58,0.961,2026-10-06
+hosted,mai_transcribe_2,microsoft/mai-transcribe-2,librispeech,20,0,0.0457,0.91,1.37,1.24,0.1,2026-10-06
 local,whisper_cpp_tiny,ggml-tiny.en.bin (whisper.cpp),librispeech,20,0,0.0457,3.85,0.09,0.07,0.0,2026-10-06
 local,whisper_cpp_base,ggml-base.en.bin (whisper.cpp),librispeech,20,0,0.0457,3.4,0.13,0.11,0.0,2026-10-06
 hosted,velma,english-fast,voxpopuli,20,0,0.051,4.77,5.41,4.58,0.025,2026-10-06
@@ -11,6 +13,8 @@ hosted,deepgram,nova-3,voxpopuli,20,0,0.051,8.3,5.85,3.91,0.258,2026-10-06
 hosted,assemblyai,universal-3-5-pro,voxpopuli,20,0,0.051,8.3,9.53,7.02,0.21,2026-10-06
 local,moonshine_tiny,moonshine-ai/moonshine-tiny,voxpopuli,20,0,0.051,14.52,0.18,0.19,0.0,2026-10-06
 local,moonshine_base,moonshine-ai/moonshine-base,voxpopuli,20,0,0.051,11.62,0.35,0.4,0.0,2026-10-06
+hosted,chirp_3,google/chirp-3,voxpopuli,20,0,0.051,9.13,5.47,5.04,0.961,2026-10-06
+hosted,mai_transcribe_2,microsoft/mai-transcribe-2,voxpopuli,20,0,0.051,7.88,1.22,1.2,0.1,2026-10-06
 local,whisper_cpp_tiny,ggml-tiny.en.bin (whisper.cpp),voxpopuli,20,0,0.051,11.0,0.09,0.1,0.0,2026-10-06
 local,whisper_cpp_base,ggml-base.en.bin (whisper.cpp),voxpopuli,20,0,0.051,10.17,0.14,0.14,0.0,2026-10-06
 hosted,velma,english-fast,commonvoice,20,0,0.03,9.2,4.69,3.93,0.025,2026-10-06
@@ -18,6 +22,8 @@ hosted,deepgram,nova-3,commonvoice,20,0,0.03,12.27,4.5,4.52,0.258,2026-10-06
 hosted,assemblyai,universal-3-5-pro,commonvoice,20,0,0.03,8.59,7.6,7.59,0.21,2026-10-06
 local,moonshine_tiny,moonshine-ai/moonshine-tiny,commonvoice,20,0,0.03,27.61,0.09,0.08,0.0,2026-10-06
 local,moonshine_base,moonshine-ai/moonshine-base,commonvoice,20,0,0.03,19.02,0.14,0.14,0.0,2026-10-06
+hosted,chirp_3,google/chirp-3,commonvoice,20,0,0.03,11.04,4.28,4.37,0.961,2026-10-06
+hosted,mai_transcribe_2,microsoft/mai-transcribe-2,commonvoice,20,0,0.03,8.59,1.11,1.1,0.1,2026-10-06
 local,whisper_cpp_tiny,ggml-tiny.en.bin (whisper.cpp),commonvoice,20,0,0.03,25.15,0.06,0.06,0.0,2026-10-06
 local,whisper_cpp_base,ggml-base.en.bin (whisper.cpp),commonvoice,20,0,0.03,22.09,0.09,0.09,0.0,2026-10-06
 hosted,velma,english-fast,overall,60,0,0.1267,3.87,4.83,4.0,0.025,2026-10-06
@@ -25,5 +31,7 @@ hosted,deepgram,nova-3,overall,60,0,0.1267,6.63,4.71,3.72,0.258,2026-10-06
 hosted,assemblyai,universal-3-5-pro,overall,60,0,0.1267,5.71,8.49,7.04,0.21,2026-10-06
 local,moonshine_tiny,moonshine-ai/moonshine-tiny,overall,60,0,0.1267,11.6,0.15,0.11,0.0,2026-10-06
 local,moonshine_base,moonshine-ai/moonshine-base,overall,60,0,0.1267,8.47,0.27,0.19,0.0,2026-10-06
+hosted,chirp_3,google/chirp-3,overall,60,0,0.1267,6.54,4.96,4.48,0.961,2026-10-06
+hosted,mai_transcribe_2,microsoft/mai-transcribe-2,overall,60,0,0.1267,5.16,1.23,1.13,0.1,2026-10-06
 local,whisper_cpp_tiny,ggml-tiny.en.bin (whisper.cpp),overall,60,0,0.1267,10.22,0.08,0.06,0.0,2026-10-06
 local,whisper_cpp_base,ggml-base.en.bin (whisper.cpp),overall,60,0,0.1267,9.21,0.12,0.1,0.0,2026-10-06

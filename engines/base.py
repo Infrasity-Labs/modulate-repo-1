@@ -17,6 +17,7 @@ class Transcription:
     latency_s: float
     duration_s: Optional[float] = None  # audio duration reported by the engine, if any
     raw: Optional[dict] = None
+    cost_usd: Optional[float] = None  # actual charge reported by the provider, if any
 
 
 class Engine(ABC):

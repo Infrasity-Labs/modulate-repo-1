@@ -5,3 +5,4 @@ __pycache__/
 datasets/audio/
 .pytest_cache/
 results/call_cache.jsonl
+results/.spend_*.json
