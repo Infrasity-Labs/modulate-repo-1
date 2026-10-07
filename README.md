@@ -180,8 +180,6 @@ Machine-readable: [`results/results.csv`](results/results.csv), [`results/result
 
 Each chart puts every engine in a single image, using all 60 files. A filled dot marks a hosted API and a ring marks an engine that runs locally; local engines also show their model size on disk.
 
-![Overview: word error rate, latency, cost and accuracy against speed for every engine](results/plots/overview.png)
-
 ### Word error rate
 
 ![WER, all engines](results/plots/wer.png)
@@ -258,7 +256,7 @@ Pairs with an empty reference are dropped. An empty hypothesis counts as all del
 │   ├── audio_utils.py         16 kHz WAV conversion
 │   └── slot_a.py, slot_b.py   Empty slots for more engines
 ├── results/
-│   ├── plots/                 Charts (overview, per metric, per dataset)
+│   ├── plots/                 Charts (per metric and per dataset)
 │   ├── results.csv            Summary table
 │   ├── results.md             Summary tables, hosted and local
 │   ├── session.json           Models, prices and run details

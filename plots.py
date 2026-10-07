@@ -1,7 +1,7 @@
 """Charts and banner for the benchmark results, drawn in a light navy, purple and coral theme.
 
 Every chart is drawn on one pixel-coordinate canvas (1 data unit = 1 px at 100 dpi) so the same
-panel functions build both the single-metric images and the combined overview image.
+panel functions build every chart.
 Colors are assigned per engine and every engine gets the same treatment; no engine is highlighted.
 """
 import numpy as np
@@ -221,43 +221,26 @@ def panel_scatter(ax, rect, items, local):
         _t(ax, cx + dx, cy + dy, NAMES.get(e, e), 14.5, weight="bold", ha=ha, zorder=7)
 
 
-def _pill(ax, x_right, y, label, local, z=4):
-    wd = 56 + len(label) * 12.6
-    ax.add_patch(FancyBboxPatch((x_right - wd, y), wd, 40, boxstyle="round,pad=0,rounding_size=20", fc="#FFFFFF",
-                                ec=EDGE, lw=1.4, zorder=z))
-    _tag_dot(ax, x_right - wd + 24, y + 20, local, r=6.2, z=z + 1)
-    _t(ax, x_right - wd + 40, y + 20, label, 15.5, color=NAVY, weight="600", zorder=z + 1)
-    return wd
-
-
-def _header(ax, w, subtitle):
-    _gtext(ax, 60, 78, "Speech-to-Text Benchmark", 52)
-    _t(ax, 62, 120, subtitle, 20, color=MUTED)
-    px = w - 60
-    for label, local in [("LOCAL  ·  this machine", True), ("HOSTED API", False)]:
-        px -= _pill(ax, px, 44, label, local) + 14
-
-
 def _overall(summaries):
     return {r["engine"]: r for r in summaries if r["dataset"] == "overall"}
 
 
 def make_banner(path):
-    """Repository banner: gradient title over flowing waveform lines."""
-    w, h = 2400, 560
+    """Repository banner, 1920 x 1080 px: gradient title over flowing waveform lines."""
+    w, h = 1920, 1080
     fig, ax = _canvas(w, h, waves=False)
-    _waves(ax, w, h, 40, h - 40, alpha=0.8, n=46, amp=0.95, seed=0.6)
-    wd = _gtext(ax, w / 2, 262, "Speech-to-Text Benchmark", 120, ha="center")
-    _t(ax, w / 2, 332, "Nine engines, three datasets, one shared scoring pipeline", 38, color=MUTED, ha="center")
+    _waves(ax, w, h, 70, h - 70, alpha=0.8, n=52, amp=0.9, seed=0.6)
+    _gtext(ax, w / 2, 520, "Speech-to-Text Benchmark", 112, ha="center")
+    _t(ax, w / 2, 598, "Nine engines, three datasets, one shared scoring pipeline", 36, color=MUTED, ha="center")
     chips = ["WORD ERROR RATE", "LATENCY", "COST PER HOUR"]
-    widths = [70 + len(c) * 17 for c in chips]
-    x = w / 2 - (sum(widths) + 24 * (len(chips) - 1)) / 2
+    widths = [64 + len(c) * 16 for c in chips]
+    x = w / 2 - (sum(widths) + 22 * (len(chips) - 1)) / 2
     for i, (c, cw) in enumerate(zip(chips, widths)):
         filled = i != 1
-        ax.add_patch(FancyBboxPatch((x, 392), cw, 62, boxstyle="round,pad=0,rounding_size=31",
+        ax.add_patch(FancyBboxPatch((x, 660), cw, 60, boxstyle="round,pad=0,rounding_size=30",
                                     fc=NAVY if filled else "#FFFFFF", ec=NAVY if filled else EDGE, lw=1.6, zorder=4))
-        _t(ax, x + cw / 2, 423, c, 21, color="#FFFFFF" if filled else NAVY, weight="bold", ha="center", zorder=5)
-        x += cw + 24
+        _t(ax, x + cw / 2, 690, c, 20, color="#FFFFFF" if filled else NAVY, weight="bold", ha="center", zorder=5)
+        x += cw + 22
     ax.set_xlim(0, w)
     ax.set_ylim(h, 0)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -268,7 +251,6 @@ def make_banner(path):
 def make_all(summaries, out_dir, engines):
     local = {e for e, c in engines.items() if c.local}
     ov = _overall(summaries)
-    n_eng = len(ov)
     pw, ph = 1260, 720
     pct = lambda v: f"{v:g}%"
     secs = lambda v: f"{v:.2f}s"
@@ -280,7 +262,6 @@ def make_all(summaries, out_dir, engines):
     note_wer = "Lower means fewer word errors · all 60 files"
     note_lat = "Mean seconds per file · log scale · local engines have no network, so are not directly comparable"
     note_cost = "USD per hour of audio · local engines: no API charge (compute not counted)"
-    subtitle = f"{n_eng} engines  ·  LibriSpeech, VoxPopuli and Common Voice  ·  60 files  ·  one shared scoring pipeline"
 
     def single(name, draw):
         fig, ax = _canvas(pw + 80, ph + 80)
@@ -303,14 +284,3 @@ def make_all(summaries, out_dir, engines):
                        "20 files" + (" · log scale" if log else ""), items, fmt, local, log=log, compact=True)
         fig.savefig(out_dir / fname, dpi=100, facecolor=BG)
         plt.close(fig)
-
-    gap, head = 40, 170
-    W, H = 2 * pw + 3 * gap, head + 2 * ph + 3 * gap
-    fig, ax = _canvas(W, H)
-    _header(ax, W, subtitle)
-    panel_bars(ax, (gap, head, pw, ph), "Word error rate", note_wer, wer, pct, local)
-    panel_bars(ax, (2 * gap + pw, head, pw, ph), "Latency per file", note_lat, lat, secs, local, log=True)
-    panel_bars(ax, (gap, head + ph + gap, pw, ph), "Cost per audio hour", note_cost, cost, usd, local)
-    panel_scatter(ax, (2 * gap + pw, head + ph + gap, pw, ph), sc, local)
-    fig.savefig(out_dir / "overview.png", dpi=100, facecolor=BG)
-    plt.close(fig)
