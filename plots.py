@@ -2,7 +2,7 @@
 
 Every chart is drawn on one pixel-coordinate canvas (1 data unit = 1 px at 100 dpi) so the same
 panel functions build every chart.
-Colors are assigned per engine and every engine gets the same treatment; no engine is highlighted.
+Each engine has its own color; Velma uses the theme's main coral red.
 """
 import numpy as np
 import matplotlib
@@ -26,9 +26,9 @@ PURPLE, CORAL = "#5B1E78", "#D6455D"
 WAVE = "#CFCBE3"
 
 PALETTE = {
-    "velma": "#2F3D9A", "deepgram": "#1E96E8", "assemblyai": "#E5484D", "chirp_3": "#6FAE1F",
+    "velma": CORAL, "deepgram": "#1E96E8", "assemblyai": "#2F3D9A", "chirp_3": "#6FAE1F",
     "mai_transcribe_2": "#12A594", "moonshine_tiny": "#F0A020", "moonshine_base": "#F26B1D",
-    "whisper_cpp_tiny": "#D4409F", "whisper_cpp_base": "#8E4EC6", "whisper_hf": "#2E9E5B",
+    "whisper_cpp_tiny": "#64748B", "whisper_cpp_base": "#8E4EC6", "whisper_hf": "#2E9E5B",
 }
 NAMES = {
     "velma": "Velma Fast", "deepgram": "Deepgram nova-3", "assemblyai": "AssemblyAI 3.5 Pro",
