@@ -1,4 +1,4 @@
-"""Dashboard-style charts for the benchmark results.
+"""Charts and banner for the benchmark results, drawn in a light navy, purple and coral theme.
 
 Every chart is drawn on one pixel-coordinate canvas (1 data unit = 1 px at 100 dpi) so the same
 panel functions build both the single-metric images and the combined overview image.
@@ -10,19 +10,25 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap, to_rgb  # noqa: E402
-from matplotlib.patches import Circle, FancyBboxPatch  # noqa: E402
+from matplotlib.font_manager import FontProperties  # noqa: E402
+from matplotlib.patches import Circle, FancyBboxPatch, PathPatch  # noqa: E402
+from matplotlib.textpath import TextPath  # noqa: E402
+from matplotlib.transforms import Affine2D  # noqa: E402
 
-plt.rcParams["font.family"] = ["Avenir Next", "Helvetica Neue", "Arial", "DejaVu Sans"]
+FONTS = ["Helvetica Neue", "Avenir Next", "Arial", "DejaVu Sans"]
+plt.rcParams["font.family"] = FONTS
 
-BG, BG2 = "#080D1C", "#101A3A"
-CARD, EDGE, TRACK = "#111A33", "#22305A", "#1A2547"
-TEXT, MUTED, FAINT = "#F1F5F9", "#8EA0C4", "#4B5C85"
-HOSTED_DOT, LOCAL_DOT = "#38BDF8", "#FBBF24"
+# Theme: white page, light cards, deep navy text, purple to coral gradient accents
+BG, BG2 = "#FFFFFF", "#F2F1F8"
+CARD, EDGE, TRACK = "#FFFFFF", "#E3E2EE", "#EEEDF5"
+NAVY, MUTED, FAINT = "#12163F", "#686C84", "#B9BACB"
+PURPLE, CORAL = "#5B1E78", "#D6455D"
+WAVE = "#CFCBE3"
 
 PALETTE = {
-    "velma": "#818CF8", "deepgram": "#38BDF8", "assemblyai": "#FB7185", "chirp_3": "#A3E635",
-    "mai_transcribe_2": "#2DD4BF", "moonshine_tiny": "#FBBF24", "moonshine_base": "#FB923C",
-    "whisper_cpp_tiny": "#F0ABFC", "whisper_cpp_base": "#C084FC", "whisper_hf": "#34D399",
+    "velma": "#2F3D9A", "deepgram": "#1E96E8", "assemblyai": "#E5484D", "chirp_3": "#6FAE1F",
+    "mai_transcribe_2": "#12A594", "moonshine_tiny": "#F0A020", "moonshine_base": "#F26B1D",
+    "whisper_cpp_tiny": "#D4409F", "whisper_cpp_base": "#8E4EC6", "whisper_hf": "#2E9E5B",
 }
 NAMES = {
     "velma": "Velma Fast", "deepgram": "Deepgram nova-3", "assemblyai": "AssemblyAI 3.5 Pro",
@@ -46,110 +52,131 @@ def _mix(color, other, t):
     return tuple(a * (1 - t) + b * t)
 
 
-def _t(ax, x, y, s, size, color=TEXT, weight="normal", ha="left", va="center", **kw):
+def _t(ax, x, y, s, size, color=NAVY, weight="normal", ha="left", va="center", **kw):
     return ax.text(x, y, s, fontsize=_fs(size), color=color, fontweight=weight, ha=ha, va=va, **kw)
 
 
-def _canvas(w, h):
+def _gtext(ax, x, y, s, size, ha="left", weight="bold", z=8, c0=PURPLE, c1=CORAL):
+    """Text filled with the purple to coral gradient. y is the baseline (pixel coordinates, y down)."""
+    tp = TextPath((0, 0), s, size=size, prop=FontProperties(family=FONTS, weight=weight))
+    bb = tp.get_extents()
+    xoff = x - bb.x0 - (bb.width / 2 if ha == "center" else bb.width if ha == "right" else 0)
+    patch = PathPatch(tp, transform=Affine2D().scale(1, -1).translate(xoff, y) + ax.transData,
+                      fc="none", ec="none", zorder=z)
+    ax.add_patch(patch)
+    im = ax.imshow(np.linspace(0, 1, 256)[None, :], extent=(xoff + bb.x0, xoff + bb.x1, y - bb.y0, y - bb.y1),
+                   cmap=LinearSegmentedColormap.from_list("t", [c0, c1]), aspect="auto", zorder=z)
+    im.set_clip_path(patch)
+    return bb.width
+
+
+def _waves(ax, w, h, y0, y1, alpha=0.5, n=34, amp=0.5, seed=0):
+    """Faint flowing waveform lines, like the ribbon behind the Modulate hero."""
+    xs = np.linspace(0, w, 500)
+    env = 0.30 + 0.70 * np.exp(-(((xs - 0.55 * w) / (0.40 * w)) ** 2))
+    mid, span = (y0 + y1) / 2, (y1 - y0) / 2 * amp
+    cm = LinearSegmentedColormap.from_list("w", [PURPLE, CORAL])
+    for i in range(n):
+        f = i / (n - 1)
+        ph = f * 2.4 + seed
+        y = mid + span * env * np.sin(2 * np.pi * xs / (0.62 * w) + ph) * (0.35 + 0.65 * (1 - abs(f - 0.5) * 1.4))
+        y = y + (f - 0.5) * span * 0.55 * np.cos(2 * np.pi * xs / (0.9 * w) - ph)
+        ax.plot(xs, y, color=_mix(WAVE, cm(f)[:3], 0.35), alpha=alpha * (0.45 + 0.55 * np.sin(np.pi * f)),
+                lw=0.9, zorder=1)
+
+
+def _canvas(w, h, waves=True):
     fig = plt.figure(figsize=(w / 100, h / 100), dpi=100)
     fig.patch.set_facecolor(BG)
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
     ax.set_ylim(h, 0)
     ax.axis("off")
-    grad = np.linspace(0, 1, 256)[:, None]
-    ax.imshow(grad, extent=(0, w, h, 0), cmap=LinearSegmentedColormap.from_list("bg", [BG, BG2]),
-              aspect="auto", zorder=0)
-    # soft color blobs for depth
-    yy, xx = np.mgrid[0:h:6, 0:w:6]
-    for cx, cy, rad, col in [(0.05 * w, 0.0, 0.55 * w, "#6366F1"), (w, h, 0.6 * w, "#EC4899")]:
-        a = np.clip(1 - np.hypot(xx - cx, yy - cy) / rad, 0, 1) ** 2 * 0.22
-        rgba = np.zeros(a.shape + (4,))
-        rgba[..., :3] = to_rgb(col)
-        rgba[..., 3] = a
-        ax.imshow(rgba, extent=(0, w, h, 0), aspect="auto", zorder=1)
+    ax.imshow(np.linspace(0, 1, 256)[:, None], extent=(0, w, h, 0),
+              cmap=LinearSegmentedColormap.from_list("bg", [BG, BG2]), aspect="auto", zorder=0)
+    if waves:
+        _waves(ax, w, h, 0, h, alpha=0.45, amp=0.55)
+    ax.set_xlim(0, w)
+    ax.set_ylim(h, 0)
     return fig, ax
 
 
 def _card(ax, x, y, w, h):
+    for k, a in [(10, 0.025), (6, 0.035), (3, 0.05)]:  # soft shadow
+        ax.add_patch(FancyBboxPatch((x - k + 1, y - k + 7), w + 2 * k - 2, h + 2 * k - 2,
+                                    boxstyle=f"round,pad=0,rounding_size={22 + k}", fc=NAVY, ec="none",
+                                    alpha=a, zorder=1.5))
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=22", fc=CARD, ec=EDGE,
                                 lw=1.3, zorder=2))
 
 
 def _grad_bar(ax, x, y, w, h, color, z=5):
-    """Rounded bar with a horizontal gradient and a soft glow."""
+    """Rounded bar with a light-to-full horizontal gradient and a soft shadow."""
     r = min(h / 2, w / 2)
-    for k, alpha in [(8, 0.05), (5, 0.08), (2.5, 0.12)]:
-        ax.add_patch(FancyBboxPatch((x - k, y - k), w + 2 * k, h + 2 * k,
-                                    boxstyle=f"round,pad=0,rounding_size={r + k}", fc=color, ec="none",
-                                    alpha=alpha, zorder=z - 1))
-    clip = FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}", fc="none", ec="none",
-                          zorder=z)
+    ax.add_patch(FancyBboxPatch((x + 1, y + 4), w, h, boxstyle=f"round,pad=0,rounding_size={r}", fc=color,
+                                ec="none", alpha=0.18, zorder=z - 1))
+    clip = FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}", fc="none", ec="none", zorder=z)
     ax.add_patch(clip)
-    cmap = LinearSegmentedColormap.from_list("g", [_mix(color, "#000000", 0.45), color, _mix(color, "#FFFFFF", 0.3)])
+    cmap = LinearSegmentedColormap.from_list("g", [_mix(color, "#FFFFFF", 0.55), color])
     im = ax.imshow(np.linspace(0, 1, 256)[None, :], extent=(x, x + w, y + h, y), cmap=cmap, aspect="auto",
                    zorder=z, interpolation="bicubic")
     im.set_clip_path(clip)
-    # thin highlight along the top edge
-    ax.plot([x + r, x + w - r], [y + 2.5, y + 2.5], color="#FFFFFF", alpha=0.25, lw=1.2, zorder=z + 1,
+    ax.plot([x + r, x + w - r], [y + 3, y + 3], color="#FFFFFF", alpha=0.45, lw=1.2, zorder=z + 1,
             solid_capstyle="round")
 
 
-def _dot(ax, x, y, color, r=4.5, z=6):
-    ax.add_patch(Circle((x, y), r, fc=color, ec="none", zorder=z))
+def _tag_dot(ax, x, y, local, r=4.2, z=6):
+    """Filled dot for hosted engines, ring for local engines (same convention as the scatter plot)."""
+    if local:
+        ax.add_patch(Circle((x, y), r - 0.6, fc="#FFFFFF", ec=NAVY, lw=1.5, zorder=z))
+    else:
+        ax.add_patch(Circle((x, y), r, fc=NAVY, ec="none", zorder=z))
 
 
-def panel_bars(ax, rect, title, subtitle, items, fmt, local, log=False, compact=False, price=False):
+def panel_bars(ax, rect, title, subtitle, items, fmt, local, log=False, compact=False):
     """Ranked horizontal bars. items: list of (engine, value); best (lowest) first."""
     x, y, w, h = rect
     _card(ax, x, y, w, h)
-    _t(ax, x + 30, y + 42, title, 25 if not compact else 21, weight="bold")
-    _t(ax, x + 30, y + 74, subtitle, 15 if not compact else 13, color=MUTED)
+    _gtext(ax, x + 30, y + 52, title, 29 if not compact else 24)
+    _t(ax, x + 30, y + 80, subtitle, 15 if not compact else 13, color=MUTED)
     items = sorted(items, key=lambda it: it[1])
     n = len(items)
-    top, bottom = y + (108 if not compact else 100), y + h - 22
+    top, bottom = y + (112 if not compact else 104), y + h - 22
     rh = (bottom - top) / n
     name_w = 262 if not compact else 196
-    bx0, bx1 = x + 30 + 30 + name_w - 30, x + w - 30 - (92 if not compact else 78)
-    bx0 = x + 40 + name_w
+    bx0, bx1 = x + 40 + name_w, x + w - 30 - (92 if not compact else 78)
     vals = [v for _, v in items]
     vmax = max(vals) or 1
     pos = [v for v in vals if v > 0]
     lo = (min(pos) * 0.45) if (log and pos) else 0
     for i, (e, v) in enumerate(items):
         cy = top + rh * (i + 0.5)
-        col = PALETTE.get(e, "#94A3B8")
-        # rank badge
-        ax.add_patch(Circle((x + 48, cy), 14, fc=_mix(col, BG, 0.78), ec=col, lw=1.4, zorder=4))
-        _t(ax, x + 48, cy + 0.5, str(i + 1), 12.5, color=col, weight="bold", ha="center", zorder=5)
-        # name and tag
+        col = PALETTE.get(e, "#8A8DA3")
+        ax.add_patch(Circle((x + 48, cy), 14, fc="#FFFFFF", ec=col, lw=1.8, zorder=4))
+        _t(ax, x + 48, cy + 0.5, str(i + 1), 14, color=col, weight="bold", ha="center", zorder=5)
         _t(ax, x + 74, cy - 9, NAMES.get(e, e), 17.5 if not compact else 15, weight="bold", zorder=5)
         is_local = e in local
-        _dot(ax, x + 79, cy + 13, LOCAL_DOT if is_local else HOSTED_DOT, 3.6)
+        _tag_dot(ax, x + 79, cy + 13, is_local)
         tag = ("LOCAL  ·  " + MODEL_SIZE[e]) if (is_local and e in MODEL_SIZE) else ("LOCAL" if is_local else "HOSTED API")
         _t(ax, x + 90, cy + 13, tag, 12 if not compact else 11, color=MUTED, weight="600", zorder=5)
-        # track and bar
         ax.add_patch(FancyBboxPatch((bx0, cy - 10), bx1 - bx0, 20, boxstyle="round,pad=0,rounding_size=10",
                                     fc=TRACK, ec="none", zorder=3))
         if log and v > 0:
             frac = (np.log10(v) - np.log10(lo)) / (np.log10(vmax * 1.05) - np.log10(lo))
         else:
-            frac = v / (vmax * 1.0)
+            frac = v / vmax
         length = max(frac * (bx1 - bx0), 14)
         _grad_bar(ax, bx0, cy - 10, length, 20, col)
-        lab = fmt(v)
-        _t(ax, bx0 + length + 12, cy, lab, 18 if not compact else 15.5, weight="bold", zorder=6)
-        if price and v == 0:
-            pass
+        _t(ax, bx0 + length + 12, cy, fmt(v), 18 if not compact else 15.5, weight="bold", zorder=6)
 
 
 def panel_scatter(ax, rect, items, local):
     """WER against latency. items: list of (engine, wer, latency)."""
     x, y, w, h = rect
     _card(ax, x, y, w, h)
-    _t(ax, x + 30, y + 42, "Accuracy against speed", 25, weight="bold")
-    _t(ax, x + 30, y + 74, "Top right is more accurate and faster · rings run locally, no network", 15, color=MUTED)
-    px0, px1, py0, py1 = x + 88, x + w - 40, y + 116, y + h - 66
+    _gtext(ax, x + 30, y + 52, "Accuracy against speed", 29)
+    _t(ax, x + 30, y + 80, "Top right is more accurate and faster · rings run locally, no network", 15, color=MUTED)
+    px0, px1, py0, py1 = x + 88, x + w - 40, y + 120, y + h - 66
     wers = [i[1] for i in items]
     lats = [i[2] for i in items]
     wmin, wmax = 0, max(wers) * 1.12
@@ -161,11 +188,10 @@ def panel_scatter(ax, rect, items, local):
     def Y(lv):  # log, faster at the top
         return py0 + (np.log10(lv) - np.log10(lmin)) / (np.log10(lmax) - np.log10(lmin)) * (py1 - py0)
 
-    # glow in the "better" corner
     yy, xx = np.mgrid[int(py0):int(py1):4, int(px0):int(px1):4]
-    a = np.clip(1 - np.hypot(xx - px1, yy - py0) / ((px1 - px0) * 0.62), 0, 1) ** 2 * 0.30
+    a = np.clip(1 - np.hypot(xx - px1, yy - py0) / ((px1 - px0) * 0.62), 0, 1) ** 2 * 0.40
     rgba = np.zeros(a.shape + (4,))
-    rgba[..., :3] = to_rgb("#34D399")
+    rgba[..., :3] = to_rgb("#8EDCC0")
     rgba[..., 3] = a
     ax.imshow(rgba, extent=(px0, px1, py1, py0), aspect="auto", zorder=3)
     for gv in [0.1, 1, 10]:
@@ -179,40 +205,64 @@ def panel_scatter(ax, rect, items, local):
     _t(ax, (px0 + px1) / 2, y + h - 22, "Word error rate (lower is better, axis reversed)", 14, color=MUTED, ha="center")
     ax.text(x + 30, (py0 + py1) / 2, "Mean latency per file (log scale)", fontsize=_fs(14), color=MUTED,
             rotation=90, ha="center", va="center")
-    # label placement (dx, dy, ha) in px, chosen to keep labels apart
     off = {"velma": (0, -24, "center"), "deepgram": (-18, -22, "right"), "assemblyai": (20, 4, "left"),
            "chirp_3": (-18, 24, "right"), "mai_transcribe_2": (0, 26, "center"),
            "moonshine_tiny": (0, -24, "center"), "moonshine_base": (0, 26, "center"),
            "whisper_cpp_tiny": (22, 4, "left"), "whisper_cpp_base": (0, 26, "center")}
     for e, wv, lv in items:
-        col = PALETTE.get(e, "#94A3B8")
+        col = PALETTE.get(e, "#8A8DA3")
         cx, cy = X(wv), Y(lv)
-        for rr, al in [(22, 0.07), (16, 0.12)]:
-            ax.add_patch(Circle((cx, cy), rr, fc=col, ec="none", alpha=al, zorder=4))
+        ax.add_patch(Circle((cx + 1, cy + 4), 13, fc=col, ec="none", alpha=0.20, zorder=4))
         if e in local:
-            ax.add_patch(Circle((cx, cy), 9.5, fc=CARD, ec=col, lw=3, zorder=6))
+            ax.add_patch(Circle((cx, cy), 10.5, fc="#FFFFFF", ec=col, lw=3.2, zorder=6))
         else:
-            ax.add_patch(Circle((cx, cy), 9.5, fc=col, ec="#FFFFFF", lw=1.4, zorder=6))
+            ax.add_patch(Circle((cx, cy), 10.5, fc=col, ec="#FFFFFF", lw=1.8, zorder=6))
         dx, dy, ha = off.get(e, (0, -24, "center"))
         _t(ax, cx + dx, cy + dy, NAMES.get(e, e), 14.5, weight="bold", ha=ha, zorder=7)
 
 
+def _pill(ax, x_right, y, label, local, z=4):
+    wd = 56 + len(label) * 12.6
+    ax.add_patch(FancyBboxPatch((x_right - wd, y), wd, 40, boxstyle="round,pad=0,rounding_size=20", fc="#FFFFFF",
+                                ec=EDGE, lw=1.4, zorder=z))
+    _tag_dot(ax, x_right - wd + 24, y + 20, local, r=6.2, z=z + 1)
+    _t(ax, x_right - wd + 40, y + 20, label, 15.5, color=NAVY, weight="600", zorder=z + 1)
+    return wd
+
+
 def _header(ax, w, subtitle):
-    _t(ax, 60, 62, "Speech-to-Text Benchmark", 46, weight="bold")
-    _t(ax, 62, 112, subtitle, 20, color=MUTED)
-    # legend pills
+    _gtext(ax, 60, 78, "Speech-to-Text Benchmark", 52)
+    _t(ax, 62, 120, subtitle, 20, color=MUTED)
     px = w - 60
-    for label, col in [("LOCAL  ·  this machine", LOCAL_DOT), ("HOSTED API", HOSTED_DOT)]:
-        wd = 56 + len(label) * 12.6
-        ax.add_patch(FancyBboxPatch((px - wd, 40), wd, 40, boxstyle="round,pad=0,rounding_size=20", fc=CARD,
-                                    ec=EDGE, lw=1.2, zorder=3))
-        _dot(ax, px - wd + 22, 60, col, 5.5)
-        _t(ax, px - wd + 38, 60, label, 15.5, color=TEXT, weight="600", zorder=4)
-        px -= wd + 14
+    for label, local in [("LOCAL  ·  this machine", True), ("HOSTED API", False)]:
+        px -= _pill(ax, px, 44, label, local) + 14
 
 
 def _overall(summaries):
     return {r["engine"]: r for r in summaries if r["dataset"] == "overall"}
+
+
+def make_banner(path):
+    """Repository banner: gradient title over flowing waveform lines."""
+    w, h = 2400, 560
+    fig, ax = _canvas(w, h, waves=False)
+    _waves(ax, w, h, 40, h - 40, alpha=0.8, n=46, amp=0.95, seed=0.6)
+    wd = _gtext(ax, w / 2, 262, "Speech-to-Text Benchmark", 120, ha="center")
+    _t(ax, w / 2, 332, "Nine engines, three datasets, one shared scoring pipeline", 38, color=MUTED, ha="center")
+    chips = ["WORD ERROR RATE", "LATENCY", "COST PER HOUR"]
+    widths = [70 + len(c) * 17 for c in chips]
+    x = w / 2 - (sum(widths) + 24 * (len(chips) - 1)) / 2
+    for i, (c, cw) in enumerate(zip(chips, widths)):
+        filled = i != 1
+        ax.add_patch(FancyBboxPatch((x, 392), cw, 62, boxstyle="round,pad=0,rounding_size=31",
+                                    fc=NAVY if filled else "#FFFFFF", ec=NAVY if filled else EDGE, lw=1.6, zorder=4))
+        _t(ax, x + cw / 2, 423, c, 21, color="#FFFFFF" if filled else NAVY, weight="bold", ha="center", zorder=5)
+        x += cw + 24
+    ax.set_xlim(0, w)
+    ax.set_ylim(h, 0)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=100, facecolor=BG)
+    plt.close(fig)
 
 
 def make_all(summaries, out_dir, engines):
@@ -243,7 +293,6 @@ def make_all(summaries, out_dir, engines):
     single("cost_per_hour.png", lambda ax, r: panel_bars(ax, r, "Cost per audio hour", note_cost, cost, usd, local))
     single("wer_vs_latency.png", lambda ax, r: panel_scatter(ax, r, sc, local))
 
-    # per-dataset detail: three panels side by side
     for key, fname, title, fmt, log in [("wer_percent", "wer_by_dataset.png", "Word error rate", pct, False),
                                          ("mean_latency_s", "latency_by_dataset.png", "Latency per file", secs, True)]:
         cw, chh, gap = 880, 720, 30
@@ -255,7 +304,6 @@ def make_all(summaries, out_dir, engines):
         fig.savefig(out_dir / fname, dpi=100, facecolor=BG)
         plt.close(fig)
 
-    # overview: everything on one image
     gap, head = 40, 170
     W, H = 2 * pw + 3 * gap, head + 2 * ph + 3 * gap
     fig, ax = _canvas(W, H)

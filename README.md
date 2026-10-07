@@ -1,10 +1,12 @@
-# Speech-to-Text Benchmark: Velma, Deepgram, AssemblyAI, Chirp 3, MAI-Transcribe 2, Moonshine and whisper.cpp
+<p align="center">
+  <img src="assets/banner.png" alt="Speech-to-Text Benchmark" width="100%">
+</p>
 
-A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https://www.modulate.ai), [Deepgram](https://deepgram.com), [AssemblyAI](https://www.assemblyai.com), Google Chirp 3 and Microsoft MAI-Transcribe 2 (both through [OpenRouter](https://openrouter.ai)), and the local Moonshine and whisper.cpp models. A wrapper for OpenAI Whisper large-v3 through Hugging Face Inference Providers is included, and its results are not part of the tables yet. It follows the layout of [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
+# Speech-to-Text Benchmark
+
+A reproducible comparison of nine speech-to-text engines on the same audio with the same scoring: Velma Transcribe, Deepgram, AssemblyAI, Google Chirp 3 and Microsoft MAI-Transcribe 2 (hosted), and Moonshine and whisper.cpp (local). The layout follows [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking. See [Limitations](#limitations).
-
-![Benchmark overview: word error rate, latency, cost and accuracy against speed for every engine](results/plots/overview.png)
 
 ## Table of contents
 
@@ -14,7 +16,6 @@ A reproducible speech-to-text benchmark for [Modulate's Velma Transcribe](https:
 - [Usage](#usage)
 - [Results](#results)
 - [Text normalisation](#text-normalisation)
-- [Adding a new engine](#adding-a-new-engine)
 - [Repository layout](#repository-layout)
 - [Limitations](#limitations)
 
@@ -177,7 +178,9 @@ Test machine: Apple M1 Pro, 16 GB RAM, macOS 26.3, CPU inference (float32), Pyth
 
 Machine-readable: [`results/results.csv`](results/results.csv), [`results/results.md`](results/results.md), [`results/session.json`](results/session.json). Per-file transcripts, references and latencies: `results/<engine>_<dataset>.json`.
 
-Each chart puts every engine in a single image, using all 60 files. HOSTED API and LOCAL tags mark where an engine runs; local engines also show their model size on disk. In the scatter plot, rings are local engines.
+Each chart puts every engine in a single image, using all 60 files. A filled dot marks a hosted API and a ring marks an engine that runs locally; local engines also show their model size on disk.
+
+![Overview: word error rate, latency, cost and accuracy against speed for every engine](results/plots/overview.png)
 
 ### Word error rate
 
@@ -235,26 +238,40 @@ Change log: rule 9 was added after the fairness check on 2026-10-05. On five tes
 
 Pairs with an empty reference are dropped. An empty hypothesis counts as all deletions. No engine-specific cleanup is allowed. The fairness check found no speaker labels, filler-word markup or leftover digits in any engine's output after normalisation.
 
-## Adding a new engine
-
-1. Open the placeholder in `engines/` or copy `engines/velma.py`.
-2. Subclass `Engine`, set `name` and `price_per_hour` (USD per audio hour from the vendor's published price, or `None` if unknown), read the key from the environment, and implement `transcribe(audio_path)` returning a `Transcription` (text and measured latency).
-3. Register the class in `engines/__init__.py`.
-4. Add the key name to `.env.example` and set it in your `.env`.
-5. Run all engines together so the comparison stays in one session: `python benchmark.py --engine velma deepgram assemblyai <name> --dataset all --repeats 3`. Delete `results/call_cache.jsonl` and `results/session.json` first for a fresh session.
-
 ## Repository layout
 
 ```
-benchmark.py            single CLI entry point (run and report)
-plots.py                dashboard-style charts used by `--report`
-download_datasets.py    downloads slices and writes manifests
-engines/                base.py plus one file per engine (openrouter_stt.py and whisper_hf.py hosted; moonshine_local.py and whisper_cpp_local.py local)
-scoring/                normalize.py and wer.py, shared by all engines
-tests/                  unit tests on fake text
-datasets/manifests/     files used (audio is git-ignored)
-results/                results.csv, results.md, session.json, per-file JSON
-results/plots/          overview.png (everything in one image), wer.png, latency.png, wer_vs_latency.png, cost_per_hour.png, plus wer_by_dataset.png and latency_by_dataset.png
+.
+├── assets/
+│   └── banner.png             Repository banner
+├── datasets/
+│   └── manifests/             Files used per dataset (audio is git-ignored)
+├── engines/                   One file per engine
+│   ├── base.py                Engine base class
+│   ├── velma.py
+│   ├── deepgram.py
+│   ├── assemblyai.py
+│   ├── openrouter_stt.py      Chirp 3 and MAI-Transcribe 2 (hosted)
+│   ├── whisper_hf.py          Whisper large-v3 via Hugging Face (hosted)
+│   ├── moonshine_local.py     Moonshine tiny and base (local)
+│   ├── whisper_cpp_local.py   whisper.cpp tiny.en and base.en (local)
+│   ├── audio_utils.py         16 kHz WAV conversion
+│   └── slot_a.py, slot_b.py   Empty slots for more engines
+├── results/
+│   ├── plots/                 Charts (overview, per metric, per dataset)
+│   ├── results.csv            Summary table
+│   ├── results.md             Summary tables, hosted and local
+│   ├── session.json           Models, prices and run details
+│   └── <engine>_<dataset>.json  Per-file transcripts and latencies
+├── scoring/
+│   ├── normalize.py           Shared text normalisation
+│   └── wer.py                 WER with jiwer
+├── tests/                     Unit tests on fake text
+├── benchmark.py               CLI: run engines, rebuild reports
+├── download_datasets.py       Download slices, write manifests
+├── plots.py                   Charts and banner used by --report
+├── requirements.txt
+└── .env.example               API key names (copy to .env)
 ```
 
 ## Limitations

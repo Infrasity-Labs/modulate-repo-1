@@ -182,10 +182,11 @@ def report():
 
 
 def plot(summaries):
-    from plots import make_all  # dashboard-style images, see plots.py
+    from plots import make_all, make_banner  # themed charts and the repo banner, see plots.py
 
     PLOTS.mkdir(parents=True, exist_ok=True)
     make_all(summaries, PLOTS, ENGINES)
+    make_banner(ROOT / "assets" / "banner.png")
 
 
 def main():
