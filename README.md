@@ -4,7 +4,7 @@
 
 # Speech-to-Text Benchmark
 
-A reproducible comparison of nine speech-to-text engines on the same audio with the same scoring: Velma Transcribe, Deepgram, AssemblyAI, Google Chirp 3 and Microsoft MAI-Transcribe 2 (hosted), and Moonshine and whisper.cpp (local). The layout follows [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
+A reproducible comparison of nine speech-to-text engines on the same audio with the same scoring: [Velma Transcribe](https://www.modulate.ai/api/speech-to-text), Deepgram, AssemblyAI, Google Chirp 3 and Microsoft MAI-Transcribe 2 (hosted), and Moonshine and whisper.cpp (local). The layout follows [Picovoice's speech-to-text-benchmark](https://github.com/Picovoice/speech-to-text-benchmark): one CLI, one file per engine, shared scoring, and results and plots checked into the repo.
 
 > The samples are small (20 files and 163 to 482 reference words per dataset), so a difference of one or two words moves WER by about 0.2 to 0.6 points. Read the numbers as indicative, not as a ranking.
 
@@ -37,7 +37,7 @@ A reproducible comparison of nine speech-to-text engines on the same audio with 
 | Latency | Wall-clock seconds per file, reported as the mean and median over files. Hosted APIs include upload and server time. Local engines run on the test machine with no network. AssemblyAI is timed from the start of the upload to the finished transcript. |
 | USD per audio hour | The vendor's published batch price for the model used. |
 
-Velma, Deepgram and AssemblyAI are called 3 times per file and the latencies averaged. Chirp 3 and MAI-Transcribe 2 are called 2 times per file.
+Velma, Deepgram and AssemblyAI are called 3 times per file and the latencies averaged. Chirp 3 and MAI-Transcribe 2 are called 2 times per file. Modulate's own account of how it benchmarks speech models is in its [benchmark methodology](https://www.modulate.ai/benchmark-methodology).
 
 ## Engines and models
 
@@ -66,7 +66,7 @@ pip install -r requirements.txt
 cp .env.example .env     # set VELMA_API_KEY, DEEPGRAM_API_KEY, ASSEMBLYAI_API_KEY, OPENROUTER_API_KEY
 ```
 
-Keys are read from the environment only. `.env` is git-ignored.
+Keys are read from the environment only. `.env` is git-ignored. To get a Velma key and make a first call, see the [Velma quickstart](https://docs.modulate.ai/quickstart).
 
 ```bash
 # 1. fetch the data slices (audio is git-ignored, manifests are committed)
